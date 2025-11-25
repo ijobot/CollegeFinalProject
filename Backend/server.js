@@ -1,11 +1,9 @@
 const express = require("express");
-const sql = require("mssql");
 const cors = require("cors");
-const config = require("./config");
+const homeRouter = require("./Routers/home");
+const combatantRouter = require("./Routers/combatants");
 
 const app = express();
-
-const combatantRouter = require("./Routers/combatants");
 
 app.use(
   cors({
@@ -13,12 +11,9 @@ app.use(
   })
 );
 
-app.use("/combatants", combatantRouter);
-
-app.get("/", async (req, res) => {
-  res.send({ data: "Hey Joe, the / page is working." });
-});
-
 app.listen(5000, () => {
   console.log("The server has started!");
 });
+
+app.use("/", homeRouter);
+app.use("/combatants", combatantRouter);

@@ -1,17 +1,29 @@
 const express = require("express");
 const router = express.Router();
 const sql = require("mssql");
-const config = require("../config");
+const logger = require("../logger");
+
+router.use(logger);
 
 router.get("/", async (req, res) => {
   try {
-    const pool = await sql.connect(config.config);
-    if (pool) {
-      console.log("database successfully connected");
+    const data = await sql.query("select * from Combatants");
+    if (data) {
+      console.log(data);
+      res.send(data.recordset);
     }
-    res.send({ data: "Hey Joe, the Combatants Router is working." });
   } catch (err) {
     console.log(err);
+  }
+});
+
+router.post("/", async (req, res) => {
+  const addToParty = await sql.query(
+    "insert into Combatants values ('Kilian', 'Player', 7)"
+  );
+  if (addToParty) {
+    console.log("Party member added!");
+    res.send("Party member added");
   }
 });
 

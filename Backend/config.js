@@ -1,4 +1,4 @@
-export const config = {
+const config = {
   user: "sa",
   password: "TEST1234",
   server: "JOESLAPTOP/BATTLEPLAN",
@@ -12,3 +12,5 @@ export const config = {
   },
   port: 5555,
 };
+
+module.exports = config;
