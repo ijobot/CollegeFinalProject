@@ -4,6 +4,7 @@ const sql = require("mssql");
 const logger = require("../logger");
 
 router.use(logger);
+router.use(express.json());
 
 router.get("/", async (req, res) => {
   try {
@@ -17,14 +18,19 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  const addToParty = await sql.query(
-    "insert into Combatants values ('Kilian', 'Player', 7)"
+router.post("/", (req, res) => {
+  const { body } = req;
+  const newcombatant = { ...body };
+  const addToParty = sql.query(
+    `insert into Combatants values ('${newcombatant.name}', '${newcombatant.type}', ${newcombatant.score})`
   );
   if (addToParty) {
     console.log("Party member added!");
-    res.send("Party member added");
+    res.send(`Party member ${newcombatant.name} added`);
   }
+
+  console.log(req.body);
+  return res.send(newcombatant);
 });
 
 module.exports = router;
