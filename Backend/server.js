@@ -12,7 +12,8 @@ const app = express();
 // Define port
 const PORT = 5000;
 
-// Apply CORS library
+// Apply CORS library (this would be much more secure in commercial development,
+// but for now, the asterisk allows any and all source origins)
 app.use(
   cors({
     origin: "*",
@@ -27,5 +28,6 @@ app.listen(PORT, () => {
   console.log("The server has started!");
 });
 
+// Informing server of which routers to use for certain paths
 app.use("/", homeRouter);
 app.use("/combatants", combatantRouter);

@@ -30,7 +30,7 @@ router.post("/", (req, res) => {
   }
 
   console.log(req.body);
-  return res.send(newcombatant);
+  res.send(newcombatant);
 });
 
 module.exports = router;
