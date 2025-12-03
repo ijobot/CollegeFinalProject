@@ -1,1 +1,934 @@
-/* You can add global styles to this file, and also import other style files */
+/* ----------------- */
+/* Custom properties */
+/* ----------------- */
+
+:root {
+  /* spacing */
+  --spacing-s: 5px;
+  --spacing-m: 10px;
+  --spacing-l: 20px;
+}
+
+/* ----------- */
+/* Base Mixins */
+/* ----------- */
+
+// Text Colors
+$default-text-dark: #1a1919;
+$default-text-light: #e4e4e4;
+// Button Colors
+$default-button-bg: #b3b3b3;
+
+/* -------------------- */
+/* Default Theme Mixins */
+/* -------------------- */
+
+// Combatant, Modal, and Row Colors
+$default-player-and-link-hover: #21aabc;
+$default-monster: #fb6400;
+$default-npc: #fcbc1b;
+// Container Colors
+$default-page-bg-nav-text-and-outline: #e4d9ba;
+$default-container-bg: #023047;
+// Border Colors
+$default-topleft: #7e7462;
+$default-bottomright: #daccb8;
+$cartoon-line: #303030;
+
+/* -------------------- */
+/* Fantasy Theme Mixins */
+/* -------------------- */
+
+// Combatant, Modal, and Row Colors
+$fantasy-player-and-link-hover: #63ce54;
+$fantasy-monster: #d38773;
+$fantasy-npc: #b3996c;
+// Container Colors
+$fantasy-page-bg-nav-text-and-outline: #aee698;
+$fantasy-container-bg: #1b3022;
+// Border Colors
+$fantasy-topleft: #4b3f30;
+$fantasy-bottomright: #8b7f68;
+
+/* ---------------------- */
+/* Cyberpunk Theme Mixins */
+/* ---------------------- */
+
+// Combatant, Modal, and Row Colors
+$cyberpunk-player-and-link-hover: #15dfdf;
+$cyberpunk-monster: #f320c5;
+$cyberpunk-npc: #f3f719;
+// Container Colors
+$cyberpunk-page-bg-nav-text-and-outline: #00ff00;
+$cyberpunk-container-bg: #060b24;
+// Border Colors
+$cyberpunk-topleft: #661369;
+$cyberpunk-bottomright: #b911b1;
+
+/* --------------------- */
+/* Grimdark Theme Mixins */
+/* --------------------- */
+
+$grimdark-player-and-link-hover: #e47474;
+$grimdark-monster: #d42929;
+$grimdark-npc: #9e6b6b;
+// Container Colors
+$grimdark-page-bg-nav-text-and-outline: #de252f;
+$grimdark-container-bg: #0e0101;
+// Border Colors
+$grimdark-topleft: #584141;
+$grimdark-bottomright: #aa7373;
+
+/* --------------- */
+/* Mixin Functions */
+/* --------------- */
+
+@mixin update-background-color($color) {
+  background-color: $color;
+}
+
+@mixin update-text-color($color) {
+  color: $color;
+}
+
+@mixin update-outline-color($color) {
+  outline: 4px solid $color;
+}
+
+@mixin update-border-colors($size, $topleft, $bottomright) {
+  border-top: solid $size $topleft;
+  border-right: solid $size $bottomright;
+  border-bottom: solid $size $bottomright;
+  border-left: solid $size $topleft;
+}
+
+/* ------------------ */
+/* Baseline CSS Reset */
+/* ------------------ */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+}
+
+html,
+body {
+  font-size: 10px;
+  min-height: 100%;
+  min-width: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  height: 100%;
+}
+
+ul,
+ol,
+a {
+  text-decoration: none;
+}
+
+ul {
+  margin-left: var(--spacing-l);
+
+  :not(:last-of-type) {
+    margin-bottom: var(--spacing-s);
+  }
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ------------------------- */
+/* Button and Input Stylings */
+/* ------------------------- */
+
+button {
+  @include update-background-color($default-button-bg);
+  @include update-text-color($default-text-dark);
+  padding: var(--spacing-m) var(--spacing-l);
+  border-top: 4px solid rgba(0, 0, 0, 0.2);
+  border-right: 4px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 4px solid rgba(0, 0, 0, 0.5);
+  border-left: 4px solid rgba(0, 0, 0, 0.2);
+  font-size: 2rem;
+
+  &:active {
+    border-top: 4px solid rgba(0, 0, 0, 0.5);
+    border-right: 4px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 4px solid rgba(0, 0, 0, 0.2);
+    border-left: 4px solid rgba(0, 0, 0, 0.5);
+  }
+
+  &:hover:enabled:not(:active) {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    filter: brightness(70%);
+    cursor: not-allowed;
+  }
+}
+
+input,
+select {
+  min-width: 200px;
+  height: 40px;
+  font-size: 2rem;
+  padding: 0 var(--spacing-s);
+  @include update-border-colors(4px, $default-topleft, $default-bottomright);
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+input:focus:enabled:not(:active),
+select:focus:enabled {
+  @include update-outline-color($default-page-bg-nav-text-and-outline);
+}
+
+/* -------------------------------------- */
+/* Base Page, Container, and Modal Layout */
+/* -------------------------------------- */
+
+.page-container {
+  @include update-background-color($default-page-bg-nav-text-and-outline);
+  height: calc(100vh - 50px);
+  min-width: 100vw;
+  position: relative;
+  display: flex;
+  gap: var(--spacing-l);
+  width: 100%;
+  padding: var(--spacing-l);
+}
+
+.content-container {
+  background-color: black;
+  padding: var(--spacing-l);
+  @include update-border-colors(4px, $default-topleft, $default-bottomright);
+}
+
+.home-container {
+  display: flex;
+  width: 80%;
+  align-items: center;
+  margin: 0 auto;
+
+  .home-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-l);
+  }
+}
+
+.about-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+
+  .about-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-l);
+    text-align: center;
+  }
+}
+
+.battlefield-container {
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  width: 100%;
+  gap: var(--spacing-l);
+
+  .controls-tab {
+    position: absolute;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    line-height: 1;
+    height: 60px;
+    width: 50px;
+    top: 50%;
+    left: -28px;
+    transform: translateY(-50%);
+    z-index: 100;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    @include update-text-color($default-page-bg-nav-text-and-outline);
+    @include update-background-color($default-container-bg);
+    @include update-border-colors(
+      4px,
+      $default-page-bg-nav-text-and-outline,
+      $default-page-bg-nav-text-and-outline
+    );
+  }
+
+  .controls-grid-item {
+    padding: var(--spacing-m);
+    height: 100%;
+
+    .main-button-menu {
+      display: grid;
+      grid-template-rows: 1fr min-content;
+      height: 100%;
+      justify-content: space-between;
+
+      .buttons-array {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-m);
+
+        button {
+          padding-left: var(--spacing-m);
+          padding-right: var(--spacing-m);
+          min-width: max-content;
+        }
+      }
+    }
+  }
+
+  .combatants-grid-item {
+    .combatants {
+      display: flex;
+      flex-direction: column;
+      min-width: 100%;
+      gap: var(--spacing-l);
+    }
+  }
+}
+
+.main-nav {
+  @include update-background-color($default-container-bg);
+  @include update-text-color($default-page-bg-nav-text-and-outline);
+  display: flex;
+  height: 50px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 calc(var(--spacing-l) + 4px);
+  // border-bottom: solid 4px rgb(120, 120, 120);
+
+  .nav-column {
+    width: 100%;
+  }
+
+  .nav-menu {
+    display: flex;
+    gap: var(--spacing-l);
+    justify-content: center;
+
+    a {
+      font-size: 2rem;
+      cursor: pointer;
+      @include update-text-color($default-page-bg-nav-text-and-outline);
+    }
+
+    a:hover {
+      @include update-text-color($default-player-and-link-hover);
+      text-decoration: underline;
+    }
+
+    .active-link {
+      @include update-text-color($default-player-and-link-hover);
+      text-decoration: underline;
+    }
+  }
+}
+
+.dropdown-container {
+  position: relative;
+  text-align: end;
+
+  .themes-link {
+    font-size: 2rem;
+    cursor: pointer;
+
+    &:hover {
+      @include update-text-color($default-player-and-link-hover);
+      text-decoration: underline;
+    }
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    z-index: 100;
+    right: -1px;
+    top: 30px;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+app-theme-selection a:hover {
+  text-decoration: underline;
+}
+
+.nav-logo {
+  @include update-text-color($default-page-bg-nav-text-and-outline);
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.title-text,
+.credit-text {
+  @include update-text-color($default-player-and-link-hover);
+}
+
+.credit-text {
+  font-size: 3rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr min-content;
+  padding: var(--spacing-m);
+  border-top: 4px solid rgba(0, 0, 0, 0.2);
+  border-right: 4px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 4px solid rgba(0, 0, 0, 0.5);
+  border-left: 4px solid rgba(0, 0, 0, 0.2);
+  align-items: stretch;
+  gap: 0.5em;
+
+  .row-item {
+    button {
+      width: fit-content;
+      height: 100%;
+      border: 2px solid transparent;
+      padding: 0 var(--spacing-l);
+
+      &:hover {
+        border: 2px solid var(--button-bg-border);
+      }
+    }
+  }
+
+  .row-delete {
+    min-width: max-content;
+
+    button {
+      display: flex;
+      padding: 0;
+
+      mat-icon {
+        font-weight: 900;
+      }
+    }
+  }
+}
+
+.row-font-size {
+  font-size: 2.5rem;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.line-break {
+  width: 100%;
+  height: 4px;
+  @include update-background-color($default-text-light);
+}
+
+.extra-padding {
+  padding: calc(var(--spacing-l) * 2);
+}
+
+.home-text,
+.about-text {
+  @include update-text-color($default-text-light);
+  font-size: 2.5rem;
+}
+
+.title-text {
+  font-size: 8rem;
+  margin-top: -10px;
+}
+
+.home-text {
+  .player-text {
+    @include update-text-color($default-player-and-link-hover);
+  }
+  .monster-text {
+    @include update-text-color($default-monster);
+  }
+  .npc-text {
+    @include update-text-color($default-npc);
+  }
+  .function-text {
+    @include update-text-color($default-button-bg);
+    filter: brightness(80%);
+  }
+}
+
+/* -------------- */
+/* Responsiveness */
+/* -------------- */
+
+@media only screen and (max-width: 1000px) {
+  .page-container {
+    min-height: fit-content;
+  }
+
+  .home-container,
+  .about-container {
+    height: fit-content;
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .home-container,
+  .about-container {
+    .title-text {
+      font-size: 7rem;
+    }
+
+    .home-text,
+    .about-text > p {
+      font-size: 2.25rem;
+    }
+
+    .credit-text {
+      font-size: 2.5rem;
+    }
+  }
+
+  .button-font-size {
+    font-size: 1.5rem;
+  }
+
+  .row-font-size {
+    font-size: 2.25rem;
+  }
+
+  .main-nav {
+    .nav-column {
+      .nav-logo {
+        font-size: 2.5rem;
+      }
+
+      .nav-menu {
+        a {
+          font-size: 1.75rem;
+        }
+      }
+    }
+  }
+
+  .dropdown-container .themes-link {
+    font-size: 1.75rem;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .battlefield-container {
+    position: relative;
+    grid-template-columns: 1fr;
+    grid-template-areas: 'combat-list';
+
+    .controls-tab {
+      display: flex;
+    }
+
+    .controls-grid-item {
+      display: none;
+      margin: 0 auto;
+
+      .main-button-menu {
+        gap: var(--spacing-m);
+
+        .buttons-array {
+          flex-direction: row;
+          justify-content: center;
+        }
+      }
+    }
+
+    .combatants-grid-item {
+      grid-area: combat-list;
+      padding: var(--spacing-m);
+
+      .combatants {
+        gap: var(--spacing-m);
+      }
+    }
+  }
+
+  // .battlefield-container {
+  //   display: grid;
+  //   grid-template-columns: min-content 1fr;
+  //   width: 100%;
+  //   gap: var(--spacing-l);
+
+  //   .controls-grid-item {
+  //     padding: var(--spacing-m);
+  //     height: 100%;
+
+  //     .main-button-menu {
+  //       display: grid;
+  //       grid-template-rows: 1fr min-content;
+  //       height: 100%;
+  //       justify-content: space-between;
+
+  //       .buttons-array {
+  //         display: flex;
+  //         flex-direction: column;
+  //         gap: var(--spacing-m);
+
+  //         button {
+  //           padding-left: var(--spacing-m);
+  //           padding-right: var(--spacing-m);
+  //           min-width: max-content;
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   .combatants-grid-item {
+  //     .combatants {
+  //       display: flex;
+  //       flex-direction: column;
+  //       min-width: 100%;
+  //       gap: var(--spacing-l);
+  //     }
+  //   }
+  // }
+}
+
+@media only screen and (max-width: 700px) {
+  .home-container,
+  .about-container {
+    .title-text {
+      font-size: 6rem;
+    }
+
+    .home-text,
+    .about-text > p {
+      font-size: 2rem;
+    }
+
+    .credit-text {
+      font-size: 2.25rem;
+    }
+  }
+
+  .button-font-size {
+    font-size: 1.5rem;
+  }
+
+  .main-nav {
+    .nav-column {
+      width: fit-content;
+
+      .nav-logo {
+        font-size: 2.25rem;
+      }
+
+      .nav-menu {
+        gap: var(--spacing-m);
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  .row {
+    display: grid;
+    gap: 0;
+    grid-template-columns: 1fr min-content;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas:
+      'name delete'
+      'type .'
+      'score .';
+
+    .row-name {
+      grid-area: name;
+    }
+
+    .row-type {
+      grid-area: type;
+    }
+
+    .row-score {
+      grid-area: score;
+    }
+
+    .row-delete {
+      grid-area: delete;
+
+      button {
+        justify-self: end;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .extra-padding {
+    padding: calc(var(--spacing-l) * 1.5);
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .home-container,
+  .about-container {
+    .title-text {
+      font-size: 5rem;
+    }
+
+    .home-text,
+    .about-text > p {
+      font-size: 1.75rem;
+    }
+
+    .about-text {
+      gap: var(--spacing-m);
+    }
+
+    .credit-text {
+      font-size: 2rem;
+    }
+  }
+
+  .main-nav {
+    .nav-column {
+      .nav-logo {
+        font-size: 2rem;
+      }
+
+      .nav-menu {
+        a {
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+
+  .dropdown-container .themes-link {
+    font-size: 1.5rem;
+  }
+
+  .line-break {
+    margin-bottom: var(--spacing-s);
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .main-nav {
+    .nav-column:first-of-type {
+      display: none;
+    }
+  }
+}
+
+/* ------------- */
+/* Default Theme */
+/* ------------- */
+
+.default-theme {
+  button:hover:enabled:not(:active) {
+    @include update-outline-color($default-page-bg-nav-text-and-outline);
+    cursor: pointer;
+  }
+
+  button:disabled {
+    filter: brightness(70%);
+    cursor: not-allowed;
+  }
+
+  button:active,
+  button:focus,
+  button:focus-visible {
+    @include update-outline-color($default-page-bg-nav-text-and-outline);
+  }
+
+  input:focus:enabled:not(:active),
+  select:focus:enabled {
+    @include update-outline-color($default-page-bg-nav-text-and-outline);
+  }
+
+  app-theme-selection a:hover {
+    @include update-text-color($default-player-and-link-hover);
+  }
+
+  .main-modal {
+    @include update-background-color($default-page-bg-nav-text-and-outline);
+    @include update-border-colors(4px, $default-bottomright, $default-topleft);
+  }
+
+  .content-container:not(.player, .monster, .npc) {
+    @include update-background-color($default-container-bg);
+  }
+
+  .row:hover {
+    @include update-outline-color($default-page-bg-nav-text-and-outline);
+  }
+
+  .player {
+    @include update-background-color($default-player-and-link-hover);
+  }
+
+  .monster {
+    @include update-background-color($default-monster);
+  }
+
+  .npc {
+    @include update-background-color($default-npc);
+  }
+
+  .default {
+    @include update-text-color($default-text-light);
+  }
+}
+
+/* ------------- */
+/* Fantasy Theme */
+/* ------------- */
+
+.fantasy-theme {
+  *:not(mat-icon) {
+    font-family: 'Alice', serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+  .main-nav {
+    @include update-background-color($fantasy-container-bg);
+    @include update-text-color($fantasy-page-bg-nav-text-and-outline);
+
+    .nav-logo {
+      @include update-text-color($fantasy-page-bg-nav-text-and-outline);
+    }
+
+    .nav-menu {
+      a {
+        @include update-text-color($fantasy-page-bg-nav-text-and-outline);
+      }
+
+      a:hover {
+        @include update-text-color($fantasy-player-and-link-hover);
+        text-decoration: underline;
+      }
+
+      .active-link {
+        @include update-text-color($fantasy-player-and-link-hover);
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .dropdown-container {
+    .themes-link:hover {
+      @include update-text-color($fantasy-player-and-link-hover);
+    }
+  }
+
+  app-theme-selection a:hover {
+    @include update-text-color($fantasy-player-and-link-hover);
+  }
+
+  .page-container,
+  .main-modal {
+    background-image: url('../src/app/images/bricks.jpg');
+    background-size: cover;
+    background-blend-mode: multiply;
+    @include update-background-color(#a79780);
+    padding: calc(var(--spacing-l) * 1.5);
+    gap: calc(var(--spacing-l) * 1.5);
+  }
+
+  .main-modal {
+    @include update-border-colors(8px, $fantasy-bottomright, $fantasy-topleft);
+
+    .content-container {
+      @include update-border-colors(8px, $fantasy-topleft, $fantasy-bottomright);
+    }
+  }
+
+  .content-container {
+    @include update-border-colors(8px, $fantasy-topleft, $fantasy-bottomright);
+  }
+
+  button:hover:enabled:not(:active) {
+    @include update-outline-color($fantasy-page-bg-nav-text-and-outline);
+    cursor: pointer;
+  }
+
+  button:disabled {
+    filter: brightness(70%);
+    cursor: not-allowed;
+  }
+
+  button:active,
+  button:focus,
+  button:focus-visible {
+    @include update-outline-color($fantasy-page-bg-nav-text-and-outline);
+  }
+
+  input:focus:enabled:not(:active),
+  select:focus:enabled {
+    @include update-outline-color($fantasy-page-bg-nav-text-and-outline);
+  }
+
+  .content-container:not(.player, .monster, .npc) {
+    @include update-background-color($fantasy-container-bg);
+  }
+
+  .row:hover {
+    @include update-outline-color($fantasy-page-bg-nav-text-and-outline);
+  }
+
+  .title-text {
+    @include update-text-color($fantasy-player-and-link-hover);
+  }
+
+  .credit-text {
+    @include update-text-color($fantasy-page-bg-nav-text-and-outline);
+  }
+
+  .player {
+    @include update-background-color($fantasy-player-and-link-hover);
+  }
+
+  .monster {
+    @include update-background-color($fantasy-monster);
+  }
+
+  .npc {
+    @include update-background-color($fantasy-npc);
+  }
+
+  .default {
+    @include update-background-color($fantasy-container-bg);
+    @include update-text-color($fantasy-page-bg-nav-text-and-outline);
+  }
+
+  .home-text {
+    .player-text {
+      @include update-text-color($fantasy-player-and-link-hover);
+    }
+    .monster-text {
+      @include update-text-color($fantasy-monster);
+    }
+    .npc-text {
+      @include update-text-color($fantasy-npc);
+    }
+  }
+}

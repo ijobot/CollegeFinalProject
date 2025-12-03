@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ConvertedMonster } from '../models';
-import { Utils } from '../utils';
+import { Utils } from '../utils/utils';
 
 @Injectable({
   providedIn: 'root',

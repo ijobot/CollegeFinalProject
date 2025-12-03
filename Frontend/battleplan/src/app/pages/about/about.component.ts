@@ -1,0 +1,29 @@
+import { Component } from '@angular/core';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+
+@Component({
+  selector: 'app-about',
+  imports: [NavbarComponent],
+  template: `
+    <app-navbar></app-navbar>
+    <div class="page-container">
+      <div class="about-container">
+        <!-- CREDITS -->
+        <div class="content-container about-text extra-padding">
+          <h1 class="credit-text">Visual Design:</h1>
+          <p>Joe Loftus</p>
+          <div class="line-break"></div>
+          <h1 class="credit-text">Programming:</h1>
+          <p>Joe Loftus</p>
+          <div class="line-break"></div>
+          <h1 class="credit-text">Special Thanks:</h1>
+          <p>Ryan Piaxao - Mentor and Friend</p>
+          <p>Jack Henry - Additional Programming</p>
+          <p>Juliet Loftus - Supportive Wife</p>
+        </div>
+      </div>
+    </div>
+  `,
+  styles: ``,
+})
+export class AboutComponent {}

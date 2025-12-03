@@ -7,12 +7,4 @@ import { MonsterService } from '../../services/monster.service';
   template: ` <p>Login works!</p> `,
   styles: ``,
 })
-export class LoginComponent implements OnInit {
-  monsterService = inject(MonsterService);
-
-  ngOnInit(): void {
-    // TODO: Move this into the "successful login functionality"
-    this.monsterService.initiateService();
-    this.monsterService.monsterList$.subscribe((data) => console.log(data));
-  }
-}
+export class LoginComponent {}

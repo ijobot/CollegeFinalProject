@@ -1,10 +1,60 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { MonsterService } from '../../services/monster.service';
 
 @Component({
   selector: 'app-home',
-  imports: [],
-  template: ` <p>home works!</p> `,
+  imports: [NavbarComponent],
+  template: `
+    <app-navbar></app-navbar>
+    <div class="page-container">
+      <div class="home-container">
+        <div class="content-container home-text extra-padding">
+          <h1 class="title-text center-text">Battle Plan</h1>
+          <div class="line-break"></div>
+          <p>
+            With this app, you can easily manage and track the turn order for any tabletop role
+            playing game.
+          </p>
+          <ul>
+            <li>
+              Turn <span class="function-text">Initiative</span> scores on or off to suit any type
+              of game. While on, combatants are sorted in descending order. While off, combatants
+              are simply added to the list in the order they are entered.
+            </li>
+            <li>
+              Add <span class="player-text">Players</span>,
+              <span class="monster-text">Monsters</span>, and
+              <span class="npc-text">NPCs</span> before the battle begins, then dynamically add and
+              remove combatants during combat.
+            </li>
+            <li>
+              Click on any combatant's <span class="function-text">Name</span>,
+              <span class="function-text">Type</span>, or
+              <span class="function-text">Score</span> to edit and automatically update the list.
+            </li>
+            <li>
+              Use the <span class="function-text">Save</span> feature to store a party's
+              information, then the <span class="function-text">Load</span> feature to quickly add
+              them to each new battle.
+            </li>
+            <li>
+              <span class="function-text">Clear</span> the entire list to get ready for the next
+              showdown.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  `,
   styles: ``,
   standalone: true,
 })
-export class HomeComponent {}
+export class HomeComponent implements OnInit {
+  monsterService = inject(MonsterService);
+
+  ngOnInit(): void {
+    this.monsterService.initiateService();
+    this.monsterService.monsterList$.subscribe((data) => console.log(data));
+  }
+}
