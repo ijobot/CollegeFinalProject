@@ -1,12 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { MonsterService } from '../../services/monster.service';
+import { BackendServerService } from '../../services/backend-server.service';
 
 @Component({
   selector: 'app-home',
   imports: [NavbarComponent],
   template: `
     <app-navbar></app-navbar>
+    <button (click)="getHomeRouter()">Get HomeRouter</button>
     <div class="page-container">
       <div class="home-container">
         <div class="content-container home-text extra-padding">
@@ -51,10 +53,15 @@ import { MonsterService } from '../../services/monster.service';
   standalone: true,
 })
 export class HomeComponent implements OnInit {
-  monsterService = inject(MonsterService);
+  private monsterService = inject(MonsterService);
+  private backendServer = inject(BackendServerService);
 
   ngOnInit(): void {
     this.monsterService.initiateService();
     this.monsterService.monsterList$.subscribe((data) => console.log(data));
+  }
+
+  getHomeRouter() {
+    this.backendServer.getHome().subscribe((data) => console.log(data));
   }
 }

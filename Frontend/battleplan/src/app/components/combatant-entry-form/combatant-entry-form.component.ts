@@ -16,118 +16,158 @@ import { FormFocusDirective } from '../../utils/autofocus.directive';
   template: `
     <!-- COMBATANT CREATION -->
     @if (!updateAttribute) {
-      <ng-content>
-        <form [formGroup]="combatantCreationForm" (ngSubmit)="onCreationSubmit()" cdkTrapFocus>
+    <ng-content>
+      <form [formGroup]="combatantCreationForm" (ngSubmit)="onCreationSubmit()" cdkTrapFocus>
+        <div class="field">
+          <div class="label-and-input">
+            <label for="name">Combatant Name:</label
+            ><input
+              formFocus
+              class="large-field"
+              id="name"
+              type="text"
+              [placeholder]="name?.dirty && name?.value == '' ? 'Name required' : 'Enter name'"
+              formControlName="name"
+            />
+          </div>
+        </div>
+        @if (initiative$ | async) {
+        <ng-content>
           <div class="field">
             <div class="label-and-input">
-              <label for="name">Combatant Name:</label
-                ><input
-                formFocus
+              <label for="score">Initiative Score:</label
+              ><input
                 class="large-field"
-                id="name"
+                id="score"
                 type="text"
-                [placeholder]="name?.dirty && name?.value == '' ? 'Name required' : 'Enter name'"
-                formControlName="name"
-                />
-              </div>
-            </div>
-            @if (initiative$ | async) {
-              <ng-content>
-                <div class="field">
-                  <div class="label-and-input">
-                    <label for="score">Initiative Score:</label
-                      ><input
-                      class="large-field"
-                      id="score"
-                      type="text"
                 [placeholder]="
                   score?.dirty && score?.value == '' ? 'Score required' : 'Enter score'
                 "
-                      formControlName="score"
-                      />
-                    </div>
-                  </div>
-                </ng-content>
-              }
-              <div class="buttons">
-                <button type="submit" [disabled]="!combatantCreationForm.valid">Submit</button>
-                <button type="button" (click)="handleCloseModal()">Cancel</button>
-              </div>
-            </form>
-          </ng-content>
-        } @else {
-          <form [formGroup]="combatantUpdateForm" (ngSubmit)="onUpdateSubmit()" cdkTrapFocus>
-            <!-- NAME UPDATE FORM -->
-            @if (updateAttribute == 'name') {
-              <ng-content>
-                <div class="field">
-                  <div class="label-and-input">
-                    <label for="updateName">Combatant Name:</label
-                      ><input
-                      formFocus
-                      class="large-field"
-                      id="updateName"
-                      type="text"
-                      [placeholder]="combatant ? combatant.name : ''"
-                      formControlName="updateName"
-                      />
-                    </div>
-                  </div>
-                  <div class="buttons">
-                    <button type="submit" [disabled]="!updateName?.dirty">Submit</button>
-                    <button type="button" (click)="handleCloseModal()">Cancel</button>
-                  </div>
-                </ng-content>
-              }
-              <!-- TYPE UPDATE FORM -->
-              @if (updateAttribute == 'type') {
-                <ng-content>
-                  <div class="field">
-                    <div class="label-and-input">
-                      <label for="updateType">Combatant Type:</label
-                        ><select #options (change)="onSelection(options.value)" formFocus>
-                        <option [value]="combatant?.type" selected>
-                          {{ combatant?.type }}
-                        </option>
-                        <option [value]="selectOptions[1]">{{ selectOptions[1] }}</option>
-                        <option [value]="selectOptions[2]">{{ selectOptions[2] }}</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="buttons">
-                    <button type="submit" [disabled]="!selectionMade">Submit</button>
-                    <button type="button" (click)="handleCloseModal()">Cancel</button>
-                  </div>
-                </ng-content>
-              }
-              <!-- SCORE UPDATE FORM -->
-              @if (updateAttribute == 'score') {
-                <ng-content>
-                  <div class="field">
-                    <div class="label-and-input">
-                      <label for="updateScore">Initiative Score:</label
-                        ><input
-                        formFocus
-                        class="large-field"
-                        id="updateScore"
-                        type="text"
-                        [placeholder]="combatant ? combatant.score : ''"
-                        formControlName="updateScore"
-                        />
-                      </div>
-                    </div>
-                    <div class="buttons">
-                      <button type="submit" [disabled]="!updateScore?.dirty">Submit</button>
-                      <button type="button" (click)="handleCloseModal()">Cancel</button>
-                    </div>
-                  </ng-content>
-                }
-              </form>
-            }
-    
-            <!-- COMBATANT UPDATE -->
-    `,
-  styles: ``,
+                formControlName="score"
+              />
+            </div>
+          </div>
+        </ng-content>
+        }
+        <div class="buttons">
+          <button type="submit" [disabled]="!combatantCreationForm.valid">Submit</button>
+          <button type="button" (click)="handleCloseModal()">Cancel</button>
+        </div>
+      </form>
+    </ng-content>
+    } @else {
+    <form [formGroup]="combatantUpdateForm" (ngSubmit)="onUpdateSubmit()" cdkTrapFocus>
+      <!-- NAME UPDATE FORM -->
+      @if (updateAttribute == 'name') {
+      <ng-content>
+        <div class="field">
+          <div class="label-and-input">
+            <label for="updateName">Combatant Name:</label
+            ><input
+              formFocus
+              class="large-field"
+              id="updateName"
+              type="text"
+              [placeholder]="combatant ? combatant.name : ''"
+              formControlName="updateName"
+            />
+          </div>
+        </div>
+        <div class="buttons">
+          <button type="submit" [disabled]="!updateName?.dirty">Submit</button>
+          <button type="button" (click)="handleCloseModal()">Cancel</button>
+        </div>
+      </ng-content>
+      }
+      <!-- TYPE UPDATE FORM -->
+      @if (updateAttribute == 'type') {
+      <ng-content>
+        <div class="field">
+          <div class="label-and-input">
+            <label for="updateType">Combatant Type:</label
+            ><select #options (change)="onSelection(options.value)" formFocus>
+              <option [value]="combatant?.type" selected>
+                {{ combatant?.type }}
+              </option>
+              <option [value]="selectOptions[1]">{{ selectOptions[1] }}</option>
+              <option [value]="selectOptions[2]">{{ selectOptions[2] }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="buttons">
+          <button type="submit" [disabled]="!selectionMade">Submit</button>
+          <button type="button" (click)="handleCloseModal()">Cancel</button>
+        </div>
+      </ng-content>
+      }
+      <!-- SCORE UPDATE FORM -->
+      @if (updateAttribute == 'score') {
+      <ng-content>
+        <div class="field">
+          <div class="label-and-input">
+            <label for="updateScore">Initiative Score:</label
+            ><input
+              formFocus
+              class="large-field"
+              id="updateScore"
+              type="text"
+              [placeholder]="combatant ? combatant.score : ''"
+              formControlName="updateScore"
+            />
+          </div>
+        </div>
+        <div class="buttons">
+          <button type="submit" [disabled]="!updateScore?.dirty">Submit</button>
+          <button type="button" (click)="handleCloseModal()">Cancel</button>
+        </div>
+      </ng-content>
+      }
+    </form>
+    }
+
+    <!-- COMBATANT UPDATE -->
+  `,
+  styles: `
+  form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+  font-size: 2rem;
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .label-and-input {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    label {
+      margin-right: var(--spacing-l);
+    }
+
+    input {
+      height: 40px;
+      width: 250px;
+      font-size: 2rem;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-l);
+  }
+
+  button {
+    max-width: fit-content;
+  }
+}
+
+  `,
 })
 export class CombatantEntryFormComponent implements OnInit {
   private modalService = inject(ModalService);

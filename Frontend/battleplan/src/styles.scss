@@ -570,46 +570,6 @@ app-theme-selection a:hover {
       }
     }
   }
-
-  // .battlefield-container {
-  //   display: grid;
-  //   grid-template-columns: min-content 1fr;
-  //   width: 100%;
-  //   gap: var(--spacing-l);
-
-  //   .controls-grid-item {
-  //     padding: var(--spacing-m);
-  //     height: 100%;
-
-  //     .main-button-menu {
-  //       display: grid;
-  //       grid-template-rows: 1fr min-content;
-  //       height: 100%;
-  //       justify-content: space-between;
-
-  //       .buttons-array {
-  //         display: flex;
-  //         flex-direction: column;
-  //         gap: var(--spacing-m);
-
-  //         button {
-  //           padding-left: var(--spacing-m);
-  //           padding-right: var(--spacing-m);
-  //           min-width: max-content;
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   .combatants-grid-item {
-  //     .combatants {
-  //       display: flex;
-  //       flex-direction: column;
-  //       min-width: 100%;
-  //       gap: var(--spacing-l);
-  //     }
-  //   }
-  // }
 }
 
 @media only screen and (max-width: 700px) {
@@ -850,8 +810,6 @@ app-theme-selection a:hover {
     background-size: cover;
     background-blend-mode: multiply;
     @include update-background-color(#a79780);
-    padding: calc(var(--spacing-l) * 1.5);
-    gap: calc(var(--spacing-l) * 1.5);
   }
 
   .main-modal {
@@ -863,7 +821,7 @@ app-theme-selection a:hover {
   }
 
   .content-container {
-    @include update-border-colors(8px, $fantasy-topleft, $fantasy-bottomright);
+    @include update-border-colors(4px, $fantasy-topleft, $fantasy-bottomright);
   }
 
   button:hover:enabled:not(:active) {

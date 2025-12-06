@@ -15,79 +15,113 @@ import { CombatantEntryFormComponent } from '../combatant-entry-form/combatant-e
     <div class="overlay">
       <div class="main-modal" (clickOutside)="handleCloseModal()">
         @if (modalAppearance$ | async; as modal) {
-          <div
-            class="content-container content"
-            [ngClass]="modal.combatantType.toLowerCase()"
-            >
-            <h1 class="title">{{ modal.modalText }}</h1>
-            <!-- MODAL CONTENTS FOR ADDING COMBATANTS -->
-            @if (modal.modalContent == 'addCombatant') {
-              <ng-content>
-                <app-combatant-entry-form
-                  [combatantType]="combatantType"
-                  [modalText]="modal.modalText"
-                  ></app-combatant-entry-form
-                ></ng-content>
-              }
-              <!-- MODAL CONTENTS FOR UPDATING NAMES -->
-              @if (modal.modalContent == 'updateName') {
-                <ng-content>
-                  <app-combatant-entry-form
-                    [updateAttribute]="'name'"
-                    [combatantType]="combatantType"
-                    [modalText]="modal.modalText"
-                    ></app-combatant-entry-form
-                  ></ng-content>
-                }
-                <!-- MODAL CONTENTS FOR UPDATING TYPES -->
-                @if (modal.modalContent == 'updateType') {
-                  <ng-content>
-                    <app-combatant-entry-form
-                      [updateAttribute]="'type'"
-                      [combatantType]="combatantType"
-                      [modalText]="modal.modalText"
-                      ></app-combatant-entry-form
-                    ></ng-content>
-                  }
-                  <!-- MODAL CONTENTS FOR UPDATING SCORES -->
-                  @if (modal.modalContent == 'updateScore') {
-                    <ng-content>
-                      <app-combatant-entry-form
-                        [updateAttribute]="'score'"
-                        [combatantType]="combatantType"
-                        [modalText]="modal.modalText"
-                        ></app-combatant-entry-form
-                      ></ng-content>
-                    }
-                    <!-- MODAL CONTENTS FOR SAVING A PARTY -->
-                    @if (modal.modalContent == 'saveParty') {
-                      <div class="party-function-buttons">
-                        <button (click)="handleSaveAll()" [disabled]="!(combatants$ | async)?.length">
-                          Save
-                        </button>
-                        <button (click)="handleCloseModal()">Cancel</button>
-                      </div>
-                    }
-                    <!-- MODAL CONTENTS FOR LOADING A PARTY -->
-                    @if (modal.modalContent == 'loadParty') {
-                      <div class="party-function-buttons">
-                        <button (click)="handleLoadSavedParty()">Load Group</button>
-                        <button (click)="handleCloseModal()">Cancel</button>
-                      </div>
-                    }
-                    <!-- MODAL CONTENTS FOR CONFIRMING A "CLEAR ALL" -->
-                    @if (modal.modalContent == 'clearAll') {
-                      <div class="party-function-buttons">
-                        <button (click)="handleClearAll()">Yes</button>
-                        <button (click)="handleCloseModal()">No</button>
-                      </div>
-                    }
-                  </div>
-                }
-              </div>
-            </div>
-    `,
-  styles: ``,
+        <div class="content-container content" [ngClass]="modal.combatantType.toLowerCase()">
+          <h1 class="title">{{ modal.modalText }}</h1>
+          <!-- MODAL CONTENTS FOR ADDING COMBATANTS -->
+          @if (modal.modalContent == 'addCombatant') {
+          <ng-content>
+            <app-combatant-entry-form
+              [combatantType]="combatantType"
+              [modalText]="modal.modalText"
+            ></app-combatant-entry-form
+          ></ng-content>
+          }
+          <!-- MODAL CONTENTS FOR UPDATING NAMES -->
+          @if (modal.modalContent == 'updateName') {
+          <ng-content>
+            <app-combatant-entry-form
+              [updateAttribute]="'name'"
+              [combatantType]="combatantType"
+              [modalText]="modal.modalText"
+            ></app-combatant-entry-form
+          ></ng-content>
+          }
+          <!-- MODAL CONTENTS FOR UPDATING TYPES -->
+          @if (modal.modalContent == 'updateType') {
+          <ng-content>
+            <app-combatant-entry-form
+              [updateAttribute]="'type'"
+              [combatantType]="combatantType"
+              [modalText]="modal.modalText"
+            ></app-combatant-entry-form
+          ></ng-content>
+          }
+          <!-- MODAL CONTENTS FOR UPDATING SCORES -->
+          @if (modal.modalContent == 'updateScore') {
+          <ng-content>
+            <app-combatant-entry-form
+              [updateAttribute]="'score'"
+              [combatantType]="combatantType"
+              [modalText]="modal.modalText"
+            ></app-combatant-entry-form
+          ></ng-content>
+          }
+          <!-- MODAL CONTENTS FOR SAVING A PARTY -->
+          @if (modal.modalContent == 'saveParty') {
+          <div class="party-function-buttons">
+            <button (click)="handleSaveAll()" [disabled]="!(combatants$ | async)?.length">
+              Save
+            </button>
+            <button (click)="handleCloseModal()">Cancel</button>
+          </div>
+          }
+          <!-- MODAL CONTENTS FOR LOADING A PARTY -->
+          @if (modal.modalContent == 'loadParty') {
+          <div class="party-function-buttons">
+            <button (click)="handleLoadSavedParty()">Load Group</button>
+            <button (click)="handleCloseModal()">Cancel</button>
+          </div>
+          }
+          <!-- MODAL CONTENTS FOR CONFIRMING A "CLEAR ALL" -->
+          @if (modal.modalContent == 'clearAll') {
+          <div class="party-function-buttons">
+            <button (click)="handleClearAll()">Yes</button>
+            <button (click)="handleCloseModal()">No</button>
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+  `,
+  styles: `
+  .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+
+  .main-modal {
+    position: absolute;
+    height: fit-content;
+    width: max-content;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: var(--spacing-l);
+
+    .content {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .title {
+        font-size: 4rem;
+        text-align: center;
+        line-height: 1;
+        margin-bottom: var(--spacing-l);
+      }
+
+      .party-function-buttons {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+}
+`,
 })
 export class ModalComponent {
   private modalService = inject(ModalService);
