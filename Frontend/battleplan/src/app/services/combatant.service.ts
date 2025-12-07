@@ -3,12 +3,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Combatant, CombatantType } from '../models';
 import { LocalStorageService } from '../services/local-storage.service';
 import { STARTING_COMBATANTS } from '../models';
+import { BackendServerService } from './backend-server.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CombatantService {
   private localStorageService = inject(LocalStorageService);
+  private backendServerService = inject(BackendServerService);
 
   private _combatants$ = new BehaviorSubject<Combatant[]>(STARTING_COMBATANTS);
   private _savedParty$ = new BehaviorSubject<Combatant[]>(
@@ -93,15 +95,21 @@ export class CombatantService {
         'Saved Party',
         JSON.stringify(this._combatants$.getValue())
       );
+      this.backendServerService.saveParty(this._combatants$.getValue());
     }
   }
 
   loadSavedCombatants(): void {
     // Load only works if previous combatants have been saved
     const savedParty = this.localStorageService.getData('Saved Party');
-    if (this._savedParty$.getValue().length || savedParty) {
-      this._combatants$.next(this._savedParty$.getValue());
-    }
+    // if (this._savedParty$.getValue().length || savedParty) {
+    //   this._combatants$.next(this._savedParty$.getValue());
+    // }
+    this.backendServerService.loadParty().subscribe((data) => {
+      const updatedCombatants = [...data];
+      this.sortCombatants(updatedCombatants);
+      this._combatants$.next(updatedCombatants);
+    });
   }
 
   clearAllCombatants(): void {

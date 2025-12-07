@@ -19,7 +19,7 @@ import { BackendServerService } from '../../services/backend-server.service';
   ],
   template: `
     <app-navbar class="nav-container"></app-navbar>
-    <button (click)="getBattlefieldRouter()">Get Combatants</button>
+    <!-- <button (click)="getBattlefieldRouter()">Get Combatants</button> -->
     <div class="page-container">
       <!-- LOGO AND BUTTON MENU -->
       <div class="battlefield-container">

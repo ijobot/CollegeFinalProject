@@ -6,7 +6,7 @@ const logger = require("../logger");
 router.use(logger);
 router.use(express.json());
 
-router.get("/", async (req, res) => {
+router.get("/loadParty", async (req, res) => {
   try {
     const data = await sql.query("select * from Combatants");
     if (data) {
@@ -18,17 +18,19 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  const { body } = req;
-  const newcombatant = { ...body };
+router.post("/saveParty", async (req, res) => {
+  const combatants = req.body;
+  console.log(combatants);
   try {
-    const addToParty = await sql.query(
-      `insert into Combatants values ('${newcombatant.name}', '${newcombatant.type}', ${newcombatant.score})`
-    );
-    if (addToParty) {
-      console.log("Party member added!");
-      res.send(`Party member ${newcombatant.name} added`);
-    }
+    await combatants.forEach((combatantToAdd) => {
+      const addToParty = sql.query(
+        `insert into Combatants values ('${combatantToAdd.name}', '${combatantToAdd.type}', ${combatantToAdd.score})`
+      );
+      if (addToParty) {
+        console.log(`Party member ${combatantToAdd.name} added!`);
+      }
+    });
+    res.send(`${combatants.length} party members added to database.`);
   } catch (err) {
     console.log(err);
   }

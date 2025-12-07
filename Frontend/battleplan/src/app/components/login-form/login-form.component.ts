@@ -1,10 +1,12 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ModalService } from '../../services/modal.service';
 import { BackendServerService } from '../../services/backend-server.service';
 import { CombatantType, ModalContent, ModalText } from '../../models';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntil } from 'rxjs';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-login-form',
@@ -84,10 +86,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 }
 `,
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements OnDestroy {
   private modalService = inject(ModalService);
   private backendServerService = inject(BackendServerService);
   private router = inject(Router);
+  private _destroy$ = new Subject<void>();
   loginForm: FormGroup;
 
   @Input() entryType: string = '';
@@ -110,7 +113,7 @@ export class LoginFormComponent {
   onLoginSubmit(): void {
     this.backendServerService
       .checkLogInCredentials(this.username, this.password)
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntil(this._destroy$))
       .subscribe((data) => {
         if (data.status == 'SUCCESS') {
           this.modalService.setModalAppearance(
@@ -133,7 +136,7 @@ export class LoginFormComponent {
   onSignUpSubmit(): void {
     this.backendServerService
       .checkSignUpCredentials(this.username, this.password)
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntil(this._destroy$))
       .subscribe((data) => {
         if (data.status == 'SUCCESS') {
           this.modalService.setModalAppearance(
@@ -159,5 +162,9 @@ export class LoginFormComponent {
 
   redirectToHome(): void {
     this.router.navigate(['/home']);
+  }
+
+  ngOnDestroy(): void {
+    this._destroy$.next();
   }
 }

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AbstractControl } from '@angular/forms';
+import { Combatant } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -29,5 +29,13 @@ export class BackendServerService {
 
   getBattlefield(): Observable<any> {
     return this.http.get(`${this.expressUrl}/battlefield`);
+  }
+
+  saveParty(combatants: Combatant[]): Observable<any> {
+    return this.http.post(`${this.expressUrl}/battlefield/saveParty`, { combatants });
+  }
+
+  loadParty(): Observable<any> {
+    return this.http.get(`${this.expressUrl}/battlefield/loadParty`);
   }
 }
