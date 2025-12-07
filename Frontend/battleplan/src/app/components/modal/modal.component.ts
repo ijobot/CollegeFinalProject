@@ -6,11 +6,12 @@ import { ModalService } from '../../services/modal.service';
 import { CommonModule } from '@angular/common';
 import { ClickOutsideDirective } from '../../utils/clickoutside.directive';
 import { CombatantEntryFormComponent } from '../combatant-entry-form/combatant-entry-form.component';
+import { LoginFormComponent } from '../login-form/login-form.component';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [CommonModule, CombatantEntryFormComponent, ClickOutsideDirective],
+  imports: [CommonModule, CombatantEntryFormComponent, ClickOutsideDirective, LoginFormComponent],
   template: `
     <div class="overlay">
       <div class="main-modal" (clickOutside)="handleCloseModal()">
@@ -78,6 +79,13 @@ import { CombatantEntryFormComponent } from '../combatant-entry-form/combatant-e
             <button (click)="handleClearAll()">Yes</button>
             <button (click)="handleCloseModal()">No</button>
           </div>
+          }
+          <!-- MODAL CONTENTS FOR LOGGING IN -->
+          @if (modal.modalContent == 'signIn') {
+          <ng-content>
+            <app-login-form></app-login-form>
+          </ng-content>
+
           }
         </div>
         }

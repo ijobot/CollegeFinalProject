@@ -11,7 +11,7 @@ export class BackendServerService {
   constructor() {}
 
   getLogin(): Observable<any> {
-    return this.http.get(`${this.expressUrl}`);
+    return this.http.get(`${this.expressUrl}/login`);
   }
 
   getHome(): Observable<any> {

@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { MonsterService } from '../../services/monster.service';
 import { BackendServerService } from '../../services/backend-server.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -56,9 +57,10 @@ export class HomeComponent implements OnInit {
   private monsterService = inject(MonsterService);
   private backendServer = inject(BackendServerService);
 
+  constructor() {}
+
   ngOnInit(): void {
-    this.monsterService.initiateService();
-    this.monsterService.monsterList$.subscribe((data) => console.log(data));
+    this.monsterService.getMonsters();
   }
 
   getHomeRouter() {

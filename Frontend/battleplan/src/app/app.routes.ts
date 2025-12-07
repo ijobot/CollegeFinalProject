@@ -7,6 +7,11 @@ import { AboutComponent } from './pages/about/about.component';
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: '/login',
+    pathMatch: 'full',
+  },
+  {
+    path: 'login',
     title: 'BattlePlan Login',
     component: LoginComponent,
   },

@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 
 // Import defined routers
-
 const loginRouter = require("./Routers/login");
 const homeRouter = require("./Routers/home");
 const battlefieldRouter = require("./Routers/battlefield");
@@ -31,6 +30,6 @@ app.listen(PORT, () => {
 });
 
 // Informing server of which routers to use for certain paths
-app.use("/", loginRouter);
+app.use("/login", loginRouter);
 app.use("/home", homeRouter);
 app.use("/battlefield", battlefieldRouter);

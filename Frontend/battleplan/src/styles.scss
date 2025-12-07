@@ -50,35 +50,6 @@ $fantasy-container-bg: #1b3022;
 $fantasy-topleft: #4b3f30;
 $fantasy-bottomright: #8b7f68;
 
-/* ---------------------- */
-/* Cyberpunk Theme Mixins */
-/* ---------------------- */
-
-// Combatant, Modal, and Row Colors
-$cyberpunk-player-and-link-hover: #15dfdf;
-$cyberpunk-monster: #f320c5;
-$cyberpunk-npc: #f3f719;
-// Container Colors
-$cyberpunk-page-bg-nav-text-and-outline: #00ff00;
-$cyberpunk-container-bg: #060b24;
-// Border Colors
-$cyberpunk-topleft: #661369;
-$cyberpunk-bottomright: #b911b1;
-
-/* --------------------- */
-/* Grimdark Theme Mixins */
-/* --------------------- */
-
-$grimdark-player-and-link-hover: #e47474;
-$grimdark-monster: #d42929;
-$grimdark-npc: #9e6b6b;
-// Container Colors
-$grimdark-page-bg-nav-text-and-outline: #de252f;
-$grimdark-container-bg: #0e0101;
-// Border Colors
-$grimdark-topleft: #584141;
-$grimdark-bottomright: #aa7373;
-
 /* --------------- */
 /* Mixin Functions */
 /* --------------- */
@@ -200,6 +171,11 @@ select:focus:enabled {
   @include update-outline-color($default-page-bg-nav-text-and-outline);
 }
 
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* -------------------------------------- */
 /* Base Page, Container, and Modal Layout */
 /* -------------------------------------- */
@@ -234,14 +210,16 @@ select:focus:enabled {
   }
 }
 
-.about-container {
+.about-container,
+.login-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
 
-  .about-text {
+  .about-text,
+  .login-text {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-l);
@@ -451,7 +429,8 @@ app-theme-selection a:hover {
 }
 
 .home-text,
-.about-text {
+.about-text,
+.login-text {
   @include update-text-color($default-text-light);
   font-size: 2.5rem;
 }

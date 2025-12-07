@@ -44,6 +44,8 @@ export enum ModalText {
   updateName = 'Update Combatant Name',
   updateType = 'Update Combatant Type',
   updateScore = 'Update Combatant Score',
+  signIn = 'Please Log In',
+  signUp = 'Please Sign Up',
 }
 
 export enum ModalContent {
@@ -54,6 +56,7 @@ export enum ModalContent {
   updateName = 'updateName',
   updateType = 'updateType',
   updateScore = 'updateScore',
+  signIn = 'signIn',
 }
 
 export const STARTING_COMBATANTS: Combatant[] = [

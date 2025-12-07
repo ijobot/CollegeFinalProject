@@ -124,8 +124,6 @@ import { FormFocusDirective } from '../../utils/autofocus.directive';
       }
     </form>
     }
-
-    <!-- COMBATANT UPDATE -->
   `,
   styles: `
   form {

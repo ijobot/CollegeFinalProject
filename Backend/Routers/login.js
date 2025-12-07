@@ -18,4 +18,39 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.post("/signup", async (req, res) => {
+  let { username, password } = req.body;
+  const userNotFound = {
+    status: "FAILED",
+    message: "Empty username or password!",
+  };
+  const usernameAlreadyExists = {
+    status: "FAILED",
+    message: "That username already exists!",
+  };
+  const newUserCreated = {
+    status: "SUCCESS",
+    message: "Your username and password have been added!",
+  };
+
+  if (username.trim() == "" || password.trim() == "") {
+    res.json(userNotFound);
+  } else {
+    const usernameList = await sql.query("select username from Users");
+    const alreadyExists = usernameList.recordset.some((user) => {
+      user.username === username;
+    });
+
+    if (alreadyExists) {
+      res.json(usernameAlreadyExists);
+    } else {
+      const createNewUser = await sql.query(
+        `insert into Users VALUES ('${username}', '${password}');`
+      );
+      res.json(newUserCreated);
+    }
+  }
+  res.send("Finished");
+});
+
 module.exports = router;
