@@ -1,11 +1,14 @@
-import { Component, inject, Input, OnDestroy } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ModalService } from '../../services/modal.service';
 import { BackendServerService } from '../../services/backend-server.service';
 import { CombatantType, ModalContent, ModalText } from '../../models';
+import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-login-form',
+  standalone: true,
   imports: [ReactiveFormsModule],
   template: `<form
     [formGroup]="loginForm"
@@ -81,9 +84,10 @@ import { CombatantType, ModalContent, ModalText } from '../../models';
 }
 `,
 })
-export class LoginFormComponent implements OnDestroy {
+export class LoginFormComponent {
   private modalService = inject(ModalService);
   private backendServerService = inject(BackendServerService);
+  private router = inject(Router);
   loginForm: FormGroup;
 
   @Input() entryType: string = '';
@@ -106,6 +110,7 @@ export class LoginFormComponent implements OnDestroy {
   onLoginSubmit(): void {
     this.backendServerService
       .checkLogInCredentials(this.username, this.password)
+      .pipe(takeUntilDestroyed())
       .subscribe((data) => {
         if (data.status == 'SUCCESS') {
           this.modalService.setModalAppearance(
@@ -113,6 +118,13 @@ export class LoginFormComponent implements OnDestroy {
             ModalText.logInSuccess,
             ModalContent.success
           );
+          setTimeout(() => {
+            this.handleCloseModal();
+            this.redirectToHome();
+          }, 2000);
+        }
+        if (data.status == 'FAILED') {
+          alert(data.message);
         }
         console.log(data);
       });
@@ -121,6 +133,7 @@ export class LoginFormComponent implements OnDestroy {
   onSignUpSubmit(): void {
     this.backendServerService
       .checkSignUpCredentials(this.username, this.password)
+      .pipe(takeUntilDestroyed())
       .subscribe((data) => {
         if (data.status == 'SUCCESS') {
           this.modalService.setModalAppearance(
@@ -128,6 +141,13 @@ export class LoginFormComponent implements OnDestroy {
             ModalText.signUpSuccess,
             ModalContent.success
           );
+          setTimeout(() => {
+            this.handleCloseModal();
+            this.redirectToHome();
+          }, 2000);
+        }
+        if (data.status == 'FAILED') {
+          alert(data.message);
         }
         console.log(data);
       });
@@ -137,5 +157,7 @@ export class LoginFormComponent implements OnDestroy {
     this.modalService.closeModal();
   }
 
-  ngOnDestroy(): void {}
+  redirectToHome(): void {
+    this.router.navigate(['/home']);
+  }
 }

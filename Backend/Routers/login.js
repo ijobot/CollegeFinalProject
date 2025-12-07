@@ -52,17 +52,20 @@ router.post("/login", async (req, res) => {
       userList.recordset.forEach((record) => {
         usersArray.push(record);
       });
-      console.log(usersArray);
+      console.log("usersArray", usersArray);
 
       // First, see if the username entered is in the database
       const nameFound = !!usersArray.find((item) => {
         return item.username === username;
       });
+      console.log("nameFound", nameFound);
       if (nameFound) {
         // Next, see if the correct password was entered
-        const passwordMatch = usersArray.find((item) => {
+        const passwordMatch = !!usersArray.find((item) => {
           return item.username === username && item.password === password;
         });
+        console.log("passwordMatch", passwordMatch);
+
         if (passwordMatch) {
           // If username and password are in the database and match, send success status
           res.json(credentialsPassed);

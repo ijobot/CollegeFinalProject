@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
   imports: [NavbarComponent],
   template: `
     <app-navbar></app-navbar>
-    <button (click)="getHomeRouter()">Get HomeRouter</button>
     <div class="page-container">
       <div class="home-container">
         <div class="content-container home-text extra-padding">
@@ -55,15 +54,10 @@ import { Subscription } from 'rxjs';
 })
 export class HomeComponent implements OnInit {
   private monsterService = inject(MonsterService);
-  private backendServer = inject(BackendServerService);
 
   constructor() {}
 
   ngOnInit(): void {
     this.monsterService.getMonsters();
-  }
-
-  getHomeRouter() {
-    this.backendServer.getHome().subscribe((data) => console.log(data));
   }
 }

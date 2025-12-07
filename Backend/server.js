@@ -4,7 +4,6 @@ const cors = require("cors");
 
 // Import defined routers
 const loginRouter = require("./Routers/login");
-const homeRouter = require("./Routers/home");
 const battlefieldRouter = require("./Routers/battlefield");
 
 // Initialize server instance
@@ -31,5 +30,4 @@ app.listen(PORT, () => {
 
 // Informing server of which routers to use for certain paths
 app.use("/login", loginRouter);
-app.use("/home", homeRouter);
 app.use("/battlefield", battlefieldRouter);

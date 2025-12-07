@@ -40,7 +40,7 @@ import { CombatantType, ModalText, ModalContent } from '../../models';
   styles: ``,
 })
 export class LoginComponent implements OnInit {
-  private backendServer = inject(BackendServerService);
+  private backendServerService = inject(BackendServerService);
   modalService = inject(ModalService);
 
   combatantType = CombatantType;
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.backendServer.getLogin().subscribe((data) => console.log(data));
+    this.backendServerService.getLogin().subscribe((data) => console.log(data));
   }
 
   handleLogIn(type: CombatantType, modalText: ModalText): void {

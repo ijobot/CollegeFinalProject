@@ -1,7 +1,7 @@
-
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ThemeSelectionComponent } from '../theme-selection/theme-selection.component';
 import { ClickOutsideDirective } from '../../utils/clickoutside.directive';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dropdown',
@@ -14,19 +14,20 @@ import { ClickOutsideDirective } from '../../utils/clickoutside.directive';
         (click)="toggleDropdown()"
         onclick="this.blur()"
         (clickOutside)="closeDropdown()"
-        >
-        Theme
+      >
+        Settings
       </a>
       @if (this.isOpen) {
-        <div class="dropdown-menu">
-          <app-theme-selection></app-theme-selection>
-        </div>
+      <div class="dropdown-menu">
+        <app-theme-selection></app-theme-selection>
+      </div>
       }
     </div>
-    `,
+  `,
   styles: ``,
 })
 export class DropdownComponent {
+  private router = inject(Router);
   isOpen: boolean = false;
 
   toggleDropdown(): void {

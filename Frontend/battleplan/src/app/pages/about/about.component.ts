@@ -18,8 +18,8 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
           <div class="line-break"></div>
           <h1 class="credit-text">Special Thanks:</h1>
           <p>Ryan Piaxao - Mentor and Friend</p>
-          <p>Jack Henry - Additional Programming</p>
           <p>Juliet Loftus - Supportive Wife</p>
+          <p>Sadhbh Loftus - Cuteness Provider</p>
         </div>
       </div>
     </div>
