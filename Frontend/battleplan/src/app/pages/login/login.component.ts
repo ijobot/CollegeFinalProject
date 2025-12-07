@@ -1,10 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { MonsterService } from '../../services/monster.service';
 import { BackendServerService } from '../../services/backend-server.service';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormFocusDirective } from '../../utils/autofocus.directive';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ModalService } from '../../services/modal.service';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { Observable } from 'rxjs';
@@ -14,14 +11,18 @@ import { CombatantType, ModalText, ModalContent } from '../../models';
   selector: 'app-Login',
   imports: [ReactiveFormsModule, CommonModule, ModalComponent],
   template: `<div>
-      <button (click)="getLoginRouter()">Get LoginRouter</button>
+      <div class="main-nav"></div>
       <div class="page-container">
         <div class="login-container">
-          <div class="content-container login-text">
+          <div class="content-container login-text extra-padding">
             <h1 class="title-text center-text">Battle Plan</h1>
-            <p>Please log in or sign up</p>
+            <div class="line-break"></div>
+            <p>
+              Please log in if you are a returning user, or sign up to try Battle Plan for the first
+              time!
+            </p>
             <div class="button-group">
-              <button (click)="this.handleSignIn(combatantType.default, modalText.signIn)">
+              <button (click)="this.handleLogIn(combatantType.default, modalText.signIn)">
                 Log In
               </button>
               <button (click)="this.handleSignUp(combatantType.default, modalText.signUp)">
@@ -38,7 +39,7 @@ import { CombatantType, ModalText, ModalContent } from '../../models';
     }`,
   styles: ``,
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private backendServer = inject(BackendServerService);
   modalService = inject(ModalService);
 
@@ -46,26 +47,19 @@ export class LoginComponent {
   modalText = ModalText;
 
   showModal$: Observable<boolean> = this.modalService.modal$;
-  userSigninForm: FormGroup;
+  constructor() {}
 
-  constructor() {
-    this.userSigninForm = new FormGroup({
-      username: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required]),
-    });
-  }
-
-  getLoginRouter() {
+  ngOnInit(): void {
     this.backendServer.getLogin().subscribe((data) => console.log(data));
   }
 
-  handleSignIn(type: CombatantType, modalText: ModalText): void {
-    this.modalService.setModalAppearance(type, modalText, ModalContent.signIn);
+  handleLogIn(type: CombatantType, modalText: ModalText): void {
+    this.modalService.setModalAppearance(type, modalText, ModalContent.logIn);
     this.modalService.openModal();
   }
 
   handleSignUp(type: CombatantType, modalText: ModalText): void {
-    this.modalService.setModalAppearance(type, modalText, ModalContent.signIn);
+    this.modalService.setModalAppearance(type, modalText, ModalContent.signUp);
     this.modalService.openModal();
   }
 }

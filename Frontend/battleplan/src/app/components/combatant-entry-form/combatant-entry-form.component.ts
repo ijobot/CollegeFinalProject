@@ -163,9 +163,7 @@ import { FormFocusDirective } from '../../utils/autofocus.directive';
   button {
     max-width: fit-content;
   }
-}
-
-  `,
+}`,
 })
 export class CombatantEntryFormComponent implements OnInit {
   private modalService = inject(ModalService);

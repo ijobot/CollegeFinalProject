@@ -81,11 +81,16 @@ import { LoginFormComponent } from '../login-form/login-form.component';
           </div>
           }
           <!-- MODAL CONTENTS FOR LOGGING IN -->
-          @if (modal.modalContent == 'signIn') {
+          @if (modal.modalContent == 'logIn') {
           <ng-content>
-            <app-login-form></app-login-form>
+            <app-login-form [entryType]="'logIn'"></app-login-form>
           </ng-content>
-
+          }
+          <!-- MODAL CONTENTS FOR SIGNING UP -->
+          @if (modal.modalContent == 'signUp') {
+          <ng-content>
+            <app-login-form [entryType]="'signUp'"></app-login-form>
+          </ng-content>
           }
         </div>
         }

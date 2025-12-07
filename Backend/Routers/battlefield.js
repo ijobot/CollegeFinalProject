@@ -18,19 +18,20 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const { body } = req;
   const newcombatant = { ...body };
-  const addToParty = sql.query(
-    `insert into Combatants values ('${newcombatant.name}', '${newcombatant.type}', ${newcombatant.score})`
-  );
-  if (addToParty) {
-    console.log("Party member added!");
-    res.send(`Party member ${newcombatant.name} added`);
+  try {
+    const addToParty = await sql.query(
+      `insert into Combatants values ('${newcombatant.name}', '${newcombatant.type}', ${newcombatant.score})`
+    );
+    if (addToParty) {
+      console.log("Party member added!");
+      res.send(`Party member ${newcombatant.name} added`);
+    }
+  } catch (err) {
+    console.log(err);
   }
-
-  console.log(req.body);
-  res.send(newcombatant);
 });
 
 module.exports = router;
