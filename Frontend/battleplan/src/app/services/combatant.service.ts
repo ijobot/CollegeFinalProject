@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Combatant, CombatantType } from '../models';
+import { Combatant, CombatantType, User } from '../models';
 import { LocalStorageService } from '../services/local-storage.service';
 import { STARTING_COMBATANTS } from '../models';
 import { BackendServerService } from './backend-server.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ import { BackendServerService } from './backend-server.service';
 export class CombatantService {
   private localStorageService = inject(LocalStorageService);
   private backendServerService = inject(BackendServerService);
+  private userService = inject(UserService);
 
   private _combatants$ = new BehaviorSubject<Combatant[]>(STARTING_COMBATANTS);
   private _savedParty$ = new BehaviorSubject<Combatant[]>(
@@ -21,11 +23,15 @@ export class CombatantService {
   combatants$ = new Observable<Combatant[]>();
   savedParty$ = new Observable<Combatant[]>();
   initiative$ = new Observable<boolean>();
+  currentUser: User = { id: 0, username: 'test' };
 
   constructor() {
     this.combatants$ = this._combatants$.asObservable();
     this.savedParty$ = this._savedParty$.asObservable();
     this.initiative$ = this._initiative$.asObservable();
+    this.userService.currentUser$.subscribe((data) => {
+      this.currentUser = data;
+    });
   }
 
   toggleInitiative(): void {
@@ -95,7 +101,11 @@ export class CombatantService {
         'Saved Party',
         JSON.stringify(this._combatants$.getValue())
       );
-      this.backendServerService.saveParty(this._combatants$.getValue());
+      this.backendServerService
+        .saveParty(this._combatants$.getValue(), this.currentUser)
+        .subscribe((data) => {
+          console.log(data);
+        });
     }
   }
 
@@ -105,7 +115,7 @@ export class CombatantService {
     // if (this._savedParty$.getValue().length || savedParty) {
     //   this._combatants$.next(this._savedParty$.getValue());
     // }
-    this.backendServerService.loadParty().subscribe((data) => {
+    this.backendServerService.loadParty(this.currentUser.username).subscribe((data) => {
       const updatedCombatants = [...data];
       this.sortCombatants(updatedCombatants);
       this._combatants$.next(updatedCombatants);

@@ -38,7 +38,12 @@ import { BlurAfterClickDirective } from '../../utils/blur-after-click.directive'
         <button class="button-font-size" blurAfterClick (click)="handleToggleInitiative()">
           Initiative {{ (initiative$ | async) ? 'Off' : 'On' }}
         </button>
-        <button class="button-font-size" blurAfterClick (click)="handleSavePartyClick()">
+        <button
+          class="button-font-size"
+          blurAfterClick
+          (click)="handleSavePartyClick()"
+          [disabled]="!(combatants$ | async)?.length"
+        >
           Save Party
         </button>
         <button
@@ -65,6 +70,7 @@ export class BattlefieldControlsComponent {
   modalText = ModalText;
   savedParty$ = this.combatantService.savedParty$;
   initiative$ = this.combatantService.initiative$;
+  combatants$ = this.combatantService.combatants$;
 
   // Adding a combatant
   handleAddCombatantClick(type: CombatantType, modalText: ModalText): void {

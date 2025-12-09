@@ -18,6 +18,15 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:username", async (req, res) => {
+  const getUserData = await sql.query(
+    `SELECT id, username FROM Users WHERE username = '${req.params.username.substring(
+      1
+    )}'`
+  );
+  res.send(getUserData.recordset[0]);
+});
+
 router.post("/login", async (req, res) => {
   // Deconstruct the request body
   let { username, password } = req.body;
@@ -125,6 +134,9 @@ router.post("/signup", async (req, res) => {
       } else {
         // If username is not found, create the new profile using the given credentials
         sql.query(`INSERT INTO Users VALUES ('${username}', '${password}')`);
+        sql.query(
+          `CREATE TABLE ${username}_SavedParty (id int IDENTITY(1,1) PRIMARY KEY, name varchar(50), type varchar(50), score int);`
+        );
         res.json(userProfileCreated);
       }
     }

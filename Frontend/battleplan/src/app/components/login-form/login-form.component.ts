@@ -4,9 +4,9 @@ import { ModalService } from '../../services/modal.service';
 import { BackendServerService } from '../../services/backend-server.service';
 import { CombatantType, ModalContent, ModalText } from '../../models';
 import { Router } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { takeUntil } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login-form',
@@ -90,6 +90,7 @@ export class LoginFormComponent implements OnDestroy {
   private modalService = inject(ModalService);
   private backendServerService = inject(BackendServerService);
   private router = inject(Router);
+  private userService = inject(UserService);
   private _destroy$ = new Subject<void>();
   loginForm: FormGroup;
 
@@ -122,6 +123,7 @@ export class LoginFormComponent implements OnDestroy {
             ModalContent.success
           );
           setTimeout(() => {
+            this.userService.setCurrentUser(this.username);
             this.handleCloseModal();
             this.redirectToHome();
           }, 2000);
@@ -144,6 +146,7 @@ export class LoginFormComponent implements OnDestroy {
             ModalText.signUpSuccess,
             ModalContent.success
           );
+          this.userService.setCurrentUser(this.username);
           setTimeout(() => {
             this.handleCloseModal();
             this.redirectToHome();

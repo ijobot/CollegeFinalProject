@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Combatant } from '../models';
+import { Combatant, User } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +23,10 @@ export class BackendServerService {
     return this.http.post(`${this.expressUrl}/login/signup`, { username, password });
   }
 
+  getUserIdByUsername(username: string): Observable<any> {
+    return this.http.get(`${this.expressUrl}/login/:${username}`);
+  }
+
   getHome(): Observable<any> {
     return this.http.get(`${this.expressUrl}/home`);
   }
@@ -31,11 +35,15 @@ export class BackendServerService {
     return this.http.get(`${this.expressUrl}/battlefield`);
   }
 
-  saveParty(combatants: Combatant[]): Observable<any> {
-    return this.http.post(`${this.expressUrl}/battlefield/saveParty`, { combatants });
+  saveParty(combatants: Combatant[], currentUser: User): Observable<any> {
+    console.log('HEY JOE AT LEAST I AM RUNNING IN THE BACKEND SERVICE!');
+    return this.http.post(`${this.expressUrl}/battlefield/saveParty`, {
+      combatants,
+      currentUser,
+    });
   }
 
-  loadParty(): Observable<any> {
-    return this.http.get(`${this.expressUrl}/battlefield/loadParty`);
+  loadParty(currentUser: string): Observable<any> {
+    return this.http.get(`${this.expressUrl}/battlefield/:${currentUser}`);
   }
 }

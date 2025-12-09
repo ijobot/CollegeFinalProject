@@ -3,6 +3,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { MonsterService } from '../../services/monster.service';
 import { BackendServerService } from '../../services/backend-server.service';
 import { Subscription } from 'rxjs';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -54,8 +55,11 @@ import { Subscription } from 'rxjs';
 })
 export class HomeComponent implements OnInit {
   private monsterService = inject(MonsterService);
+  private userService = inject(UserService);
 
-  constructor() {}
+  constructor() {
+    this.userService.currentUser$.subscribe((data) => console.log(data));
+  }
 
   ngOnInit(): void {
     this.monsterService.getMonsters();
