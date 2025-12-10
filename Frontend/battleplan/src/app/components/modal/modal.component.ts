@@ -61,7 +61,7 @@ import { LoginFormComponent } from '../login-form/login-form.component';
           @if (modal.modalContent == 'saveParty') {
           <div class="party-function-buttons">
             <button (click)="handleSaveAll()" [disabled]="!(combatants$ | async)?.length">
-              Save
+              Save Party
             </button>
             <button (click)="handleCloseModal()">Cancel</button>
           </div>
@@ -69,7 +69,7 @@ import { LoginFormComponent } from '../login-form/login-form.component';
           <!-- MODAL CONTENTS FOR LOADING A PARTY -->
           @if (modal.modalContent == 'loadParty') {
           <div class="party-function-buttons">
-            <button (click)="handleLoadSavedParty()">Load Group</button>
+            <button (click)="handleLoadSavedParty()">Load Party</button>
             <button (click)="handleCloseModal()">Cancel</button>
           </div>
           }

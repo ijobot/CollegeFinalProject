@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ThemeService } from '../../services/theme-service.service';
 import { CSSTheme } from '../../models';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-theme-selection',
@@ -44,6 +45,7 @@ import { Router } from '@angular/router';
 })
 export class ThemeSelectionComponent {
   private themeService = inject(ThemeService);
+  private userService = inject(UserService);
   private router = inject(Router);
 
   theme = CSSTheme;
@@ -53,6 +55,7 @@ export class ThemeSelectionComponent {
   }
 
   handleSignOut(): void {
+    this.userService.logUserOut();
     this.router.navigate(['/login']);
   }
 }

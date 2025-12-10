@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Combatant, User } from '../models';
 
@@ -35,7 +35,10 @@ export class BackendServerService {
     return this.http.get(`${this.expressUrl}/battlefield`);
   }
 
-  saveParty(combatants: Combatant[], currentUser: User): Observable<any> {
+  saveParty(combatants: Combatant[], currentUser: User | null): Observable<any> {
+    if (currentUser === null) {
+      return of(EMPTY);
+    }
     console.log('HEY JOE AT LEAST I AM RUNNING IN THE BACKEND SERVICE!');
     return this.http.post(`${this.expressUrl}/battlefield/saveParty`, {
       combatants,
@@ -43,7 +46,7 @@ export class BackendServerService {
     });
   }
 
-  loadParty(currentUser: string): Observable<any> {
-    return this.http.get(`${this.expressUrl}/battlefield/:${currentUser}`);
+  loadParty(username: string): Observable<any> {
+    return this.http.get(`${this.expressUrl}/battlefield/:${username}`);
   }
 }

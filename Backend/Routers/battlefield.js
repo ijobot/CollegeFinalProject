@@ -9,14 +9,32 @@ router.use(express.json());
 router.post("/saveParty", async (req, res) => {
   const { combatants, currentUser } = req.body;
   try {
-    await combatants.forEach((combatantToAdd) => {
-      const addToParty = sql.query(
-        `insert into ${currentUser.username}_SavedParty values ('${combatantToAdd.name}', '${combatantToAdd.type}', ${combatantToAdd.score})`
+    const data = await sql.query(
+      `select * from ${currentUser.username}_SavedParty`
+    );
+    if (data.recordset.length) {
+      await sql.query(`DROP TABLE ${currentUser.username}_SavedParty`);
+      await sql.query(
+        `CREATE TABLE ${currentUser.username}_SavedParty (id int IDENTITY(1,1) PRIMARY KEY, name varchar(50), type varchar(50), score int);`
       );
-      if (addToParty) {
-        console.log(`Party member ${combatantToAdd.name} added!`);
-      }
-    });
+      await combatants.forEach((combatantToAdd) => {
+        const addToParty = sql.query(
+          `insert into ${currentUser.username}_SavedParty values ('${combatantToAdd.name}', '${combatantToAdd.type}', ${combatantToAdd.score})`
+        );
+        if (addToParty) {
+          console.log(`${combatantToAdd.name} added to saved party!`);
+        }
+      });
+    } else {
+      await combatants.forEach((combatantToAdd) => {
+        const addToParty = sql.query(
+          `insert into ${currentUser.username}_SavedParty values ('${combatantToAdd.name}', '${combatantToAdd.type}', ${combatantToAdd.score})`
+        );
+        if (addToParty) {
+          console.log(`${combatantToAdd.name} added to saved party!`);
+        }
+      });
+    }
     res.send(`${combatants.length} party members added to database.`);
   } catch (err) {
     console.log(err);

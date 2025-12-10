@@ -133,8 +133,10 @@ router.post("/signup", async (req, res) => {
         res.json(nameAlreadyExists);
       } else {
         // If username is not found, create the new profile using the given credentials
-        sql.query(`INSERT INTO Users VALUES ('${username}', '${password}')`);
-        sql.query(
+        await sql.query(
+          `INSERT INTO Users VALUES ('${username}', '${password}')`
+        );
+        await sql.query(
           `CREATE TABLE ${username}_SavedParty (id int IDENTITY(1,1) PRIMARY KEY, name varchar(50), type varchar(50), score int);`
         );
         res.json(userProfileCreated);
