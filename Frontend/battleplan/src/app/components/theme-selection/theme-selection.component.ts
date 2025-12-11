@@ -3,6 +3,7 @@ import { ThemeService } from '../../services/theme-service.service';
 import { CSSTheme } from '../../models';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { CombatantService } from '../../services/combatant.service';
 
 @Component({
   selector: 'app-theme-selection',
@@ -46,6 +47,7 @@ import { UserService } from '../../services/user.service';
 export class ThemeSelectionComponent {
   private themeService = inject(ThemeService);
   private userService = inject(UserService);
+  private combatantService = inject(CombatantService);
   private router = inject(Router);
 
   theme = CSSTheme;
@@ -54,8 +56,11 @@ export class ThemeSelectionComponent {
     this.themeService.setTheme(theme);
   }
 
+  // Added to this component for ease, as redevloping the dropdown would be too time consuming.
+  // Will update this in a future iteration, as this functionality is better suited elsewhere.
   handleSignOut(): void {
     this.userService.logUserOut();
+    this.combatantService.clearAllCombatants();
     this.router.navigate(['/login']);
   }
 }

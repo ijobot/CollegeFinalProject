@@ -6,7 +6,6 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { BattlefieldControlsComponent } from '../../components/battlefield-controls/battlefield-controls.component';
 import { CombatantListComponent } from '../../components/combatant-list/combatant-list.component';
 import { ModalComponent } from '../../components/modal/modal.component';
-import { BackendServerService } from '../../services/backend-server.service';
 
 @Component({
   selector: 'app-combatants',
@@ -19,7 +18,6 @@ import { BackendServerService } from '../../services/backend-server.service';
   ],
   template: `
     <app-navbar class="nav-container"></app-navbar>
-    <!-- <button (click)="getBattlefieldRouter()">Get Combatants</button> -->
     <div class="page-container">
       <!-- LOGO AND BUTTON MENU -->
       <div class="battlefield-container">
@@ -45,11 +43,6 @@ import { BackendServerService } from '../../services/backend-server.service';
 })
 export class BattlefieldComponent {
   private modalService = inject(ModalService);
-  private backendServer = inject(BackendServerService);
 
   showModal$: Observable<boolean> = this.modalService.modal$;
-
-  getBattlefieldRouter() {
-    this.backendServer.getBattlefield().subscribe((data) => console.log(data));
-  }
 }

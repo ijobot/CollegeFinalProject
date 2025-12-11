@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ClickOutsideDirective } from '../../utils/clickoutside.directive';
 import { CombatantEntryFormComponent } from '../combatant-entry-form/combatant-entry-form.component';
 import { LoginFormComponent } from '../login-form/login-form.component';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-modal',
@@ -139,6 +140,7 @@ import { LoginFormComponent } from '../login-form/login-form.component';
 export class ModalComponent {
   private modalService = inject(ModalService);
   private combatantService = inject(CombatantService);
+  private userService = inject(UserService);
 
   modalAppearance$ = this.modalService.modalAppearance$;
   combatantType: CombatantType = CombatantType.default;

@@ -11,6 +11,7 @@ import { CombatantService } from './combatant.service';
 export class UserService {
   private backendServerService = inject(BackendServerService);
   private localStorageService = inject(LocalStorageService);
+  private combatantService = inject(CombatantService);
   private _currentUser$ = new BehaviorSubject<User | null>(null);
   currentUser$ = new Observable<User | null>();
 
@@ -22,23 +23,17 @@ export class UserService {
     this.backendServerService.getUserIdByUsername(username).subscribe((data: User) => {
       this._currentUser$.next(data);
       this.localStorageService.saveData('Current User', JSON.stringify(data));
-      // this.localStorageService.saveData('Saved Party', sourceCall === 'fromSignUp')
     });
     this.backendServerService.loadParty(username).subscribe((data) => {
       if (data.length) {
-        this.localStorageService.saveData('Saved Party', 'true');
       } else {
-        this.localStorageService.saveData('Saved Party', 'false');
       }
     });
   }
 
-  getCurrentUsername(): string | null {
-    return this._currentUser$.getValue()?.username || null;
-  }
-
   logUserOut(): void {
     this.localStorageService.clearData();
+    this.combatantService.clearAllCombatants();
     this._currentUser$.next(null);
   }
 }

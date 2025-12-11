@@ -18,8 +18,8 @@ import { CombatantType, ModalText, ModalContent } from '../../models';
             <h1 class="title-text center-text">Battle Plan</h1>
             <div class="line-break"></div>
             <p>
-              Please log in if you are a returning user, or sign up to try Battle Plan for the first
-              time!
+              Please click "Log In" if you are a returning user, or click "Sign Up" to try Battle
+              Plan for the first time!
             </p>
             <div class="button-group">
               <button (click)="this.handleLogIn(combatantType.default, modalText.signIn)">

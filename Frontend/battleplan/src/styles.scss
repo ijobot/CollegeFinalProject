@@ -222,6 +222,7 @@ select:focus:enabled {
   .login-text {
     display: flex;
     flex-direction: column;
+    width: 80%;
     gap: var(--spacing-l);
     text-align: center;
   }

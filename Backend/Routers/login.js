@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     const connection = await sql.connect(config);
     if (connection) {
       console.log("database successfully connected");
-      res.send({ message: "Hey Joe, the Login Router is working." });
+      res.send({ message: "Login Router is working." });
     }
   } catch (err) {
     console.log(err);

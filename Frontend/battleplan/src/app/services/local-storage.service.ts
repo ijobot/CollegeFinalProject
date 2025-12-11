@@ -1,21 +1,11 @@
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Combatant } from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocalStorageService {
   private readonly platformId = inject(PLATFORM_ID);
-
-  checkLocalStorage(): Combatant[] {
-    const savedParty = this.getData('Saved Party');
-    if (savedParty) {
-      return JSON.parse(savedParty);
-    } else {
-      return [];
-    }
-  }
 
   saveData(key: string, value: string) {
     if (isPlatformBrowser(this.platformId)) {

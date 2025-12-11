@@ -13,11 +13,10 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
           <h1 class="credit-text">Visual Design:</h1>
           <p>Joe Loftus</p>
           <div class="line-break"></div>
-          <h1 class="credit-text">Programming:</h1>
+          <h1 class="credit-text">Front-end, Back-end, and Database Programming:</h1>
           <p>Joe Loftus</p>
           <div class="line-break"></div>
           <h1 class="credit-text">Special Thanks:</h1>
-          <p>Ryan Piaxao - Mentor and Friend</p>
           <p>Juliet Loftus - Supportive Wife</p>
           <p>Sadhbh Loftus - Cuteness Provider</p>
         </div>

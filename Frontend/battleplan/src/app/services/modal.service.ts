@@ -23,7 +23,6 @@ export class ModalService {
     this.modalAppearance$ = this._modalAppearance$.asObservable();
   }
 
-  // Needs work
   setModalAppearance(
     combatantType: CombatantType,
     modalText: ModalText,
@@ -41,7 +40,6 @@ export class ModalService {
     });
   }
 
-  // Needs work
   getCombatantToUpdate(): Combatant | undefined {
     return this.combatantToUpdate;
   }

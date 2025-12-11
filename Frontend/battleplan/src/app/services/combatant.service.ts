@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Combatant, CombatantType, User } from '../models';
+import { Combatant, CombatantType } from '../models';
 import { BackendServerService } from './backend-server.service';
-import { UserService } from './user.service';
 import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
@@ -11,26 +10,16 @@ import { LocalStorageService } from './local-storage.service';
 export class CombatantService {
   private localStorageService = inject(LocalStorageService);
   private backendServerService = inject(BackendServerService);
-  private userService = inject(UserService);
 
   private _combatants$ = new BehaviorSubject<Combatant[]>([]);
-  private _savedParty$ = new BehaviorSubject<Combatant[]>(
-    this.localStorageService.checkLocalStorage()
-  );
   private _initiative$ = new BehaviorSubject<boolean>(true);
 
   combatants$ = new Observable<Combatant[]>();
-  savedParty$ = new Observable<Combatant[]>();
   initiative$ = new Observable<boolean>();
-  currentUser: User | null = null;
 
   constructor() {
     this.combatants$ = this._combatants$.asObservable();
-    this.savedParty$ = this._savedParty$.asObservable();
     this.initiative$ = this._initiative$.asObservable();
-    this.userService.currentUser$.subscribe((data) => {
-      this.currentUser = data;
-    });
   }
 
   toggleInitiative(): void {
@@ -92,27 +81,27 @@ export class CombatantService {
     }
   }
 
-  // setSavedParty(combatants: Combatant[]): void {
-  //   this._savedParty$.next(combatants);
-  // }
-
   saveCurrentCombatants(): void {
     // Save only works if combatants are on the list
-    if (this._combatants$.getValue().length) {
-      this._savedParty$.next(this._combatants$.getValue());
-      this.localStorageService.saveData('Saved Party', 'true');
-      this.backendServerService
-        .saveParty(this._combatants$.getValue(), this.currentUser)
-        .subscribe((data) => {
-          console.log(data);
-        });
+    const user = this.localStorageService.getData('Current User');
+    if (user) {
+      const userParsed = JSON.parse(user.trim());
+      if (this._combatants$.getValue().length && userParsed) {
+        this.backendServerService
+          .saveParty(this._combatants$.getValue(), userParsed)
+          .subscribe((data) => {
+            console.log(data);
+          });
+      }
     }
   }
 
   loadSavedCombatants(): void {
     // Load only works if previous combatants have been saved
-    if (this.currentUser?.username) {
-      this.backendServerService.loadParty(this.currentUser.username).subscribe((data) => {
+    const user = this.localStorageService.getData('Current User');
+    if (user) {
+      const userParsed = JSON.parse(user);
+      this.backendServerService.loadParty(userParsed.username).subscribe((data) => {
         const updatedCombatants = [...data];
         this.sortCombatants(updatedCombatants);
         this._combatants$.next(updatedCombatants);

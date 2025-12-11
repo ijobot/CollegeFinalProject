@@ -33,7 +33,7 @@ import { BlurAfterClickDirective } from '../../utils/blur-after-click.directive'
         </button>
       </div>
 
-      <!-- SAVE/LOAD/CLEAR BUTTONS -->
+      <!-- INITIATIVE/SAVE/LOAD/CLEAR BUTTONS -->
       <div class="buttons-array function-buttons">
         <button class="button-font-size" blurAfterClick (click)="handleToggleInitiative()">
           Initiative {{ (initiative$ | async) ? 'Off' : 'On' }}
@@ -46,12 +46,7 @@ import { BlurAfterClickDirective } from '../../utils/blur-after-click.directive'
         >
           Save Party
         </button>
-        <button
-          class="button-font-size"
-          blurAfterClick
-          (click)="handleLoadSavedPartyClick()"
-          [disabled]="!(savedParty$ | async)?.length"
-        >
+        <button class="button-font-size" blurAfterClick (click)="handleLoadSavedPartyClick()">
           Load Party
         </button>
         <button class="button-font-size" blurAfterClick (click)="handleClearAllClick()">
@@ -68,7 +63,6 @@ export class BattlefieldControlsComponent {
 
   combatantType = CombatantType;
   modalText = ModalText;
-  savedParty$ = this.combatantService.savedParty$;
   initiative$ = this.combatantService.initiative$;
   combatants$ = this.combatantService.combatants$;
 
@@ -78,6 +72,7 @@ export class BattlefieldControlsComponent {
     this.modalService.openModal();
   }
 
+  // Toggling initiative on and off (some games don't use it)
   handleToggleInitiative(): void {
     this.combatantService.toggleInitiative();
   }

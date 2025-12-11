@@ -131,7 +131,6 @@ export class LoginFormComponent implements OnDestroy {
         if (data.status == 'FAILED') {
           alert(data.message);
         }
-        console.log(data);
       });
   }
 
@@ -155,7 +154,6 @@ export class LoginFormComponent implements OnDestroy {
         if (data.status == 'FAILED') {
           alert(data.message);
         }
-        console.log(data);
       });
   }
 
@@ -163,10 +161,13 @@ export class LoginFormComponent implements OnDestroy {
     this.modalService.closeModal();
   }
 
+  // Automatically forwarding signed in users to the home page, as there is no link or button to click
+  // Only a successful login will allow the deeper pages of the app to load
   redirectToHome(): void {
     this.router.navigate(['/home']);
   }
 
+  // Handling hanging subscriptions
   ngOnDestroy(): void {
     this._destroy$.next();
   }

@@ -15,6 +15,10 @@ export class BackendServerService {
     return this.http.get(`${this.expressUrl}/login`);
   }
 
+  getUserIdByUsername(username: string): Observable<any> {
+    return this.http.get(`${this.expressUrl}/login/:${username}`);
+  }
+
   checkLogInCredentials(username: string | null, password: string | null): Observable<any> {
     return this.http.post(`${this.expressUrl}/login/login`, { username, password });
   }
@@ -23,30 +27,17 @@ export class BackendServerService {
     return this.http.post(`${this.expressUrl}/login/signup`, { username, password });
   }
 
-  getUserIdByUsername(username: string): Observable<any> {
-    return this.http.get(`${this.expressUrl}/login/:${username}`);
-  }
-
-  getHome(): Observable<any> {
-    return this.http.get(`${this.expressUrl}/home`);
-  }
-
-  getBattlefield(): Observable<any> {
-    return this.http.get(`${this.expressUrl}/battlefield`);
+  loadParty(username: string): Observable<any> {
+    return this.http.get(`${this.expressUrl}/battlefield/:${username}`);
   }
 
   saveParty(combatants: Combatant[], currentUser: User | null): Observable<any> {
     if (currentUser === null) {
       return of(EMPTY);
     }
-    console.log('HEY JOE AT LEAST I AM RUNNING IN THE BACKEND SERVICE!');
     return this.http.post(`${this.expressUrl}/battlefield/saveParty`, {
       combatants,
       currentUser,
     });
-  }
-
-  loadParty(username: string): Observable<any> {
-    return this.http.get(`${this.expressUrl}/battlefield/:${username}`);
   }
 }

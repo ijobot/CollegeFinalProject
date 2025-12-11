@@ -1,7 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { ThemeSelectionComponent } from '../theme-selection/theme-selection.component';
 import { ClickOutsideDirective } from '../../utils/clickoutside.directive';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dropdown',
@@ -27,7 +26,6 @@ import { Router } from '@angular/router';
   styles: ``,
 })
 export class DropdownComponent {
-  private router = inject(Router);
   isOpen: boolean = false;
 
   toggleDropdown(): void {

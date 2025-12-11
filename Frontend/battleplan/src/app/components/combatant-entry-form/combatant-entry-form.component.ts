@@ -235,6 +235,7 @@ export class CombatantEntryFormComponent implements OnInit {
     }
   }
 
+  // Slightly different functionality depending on which attribute is being changed
   onUpdateSubmit(): void {
     if (this.combatant) {
       if (this.updateAttribute == 'name') {
@@ -260,6 +261,7 @@ export class CombatantEntryFormComponent implements OnInit {
     }
   }
 
+  // Populates the dropdown with the currently selected type first, follwed by the other 2
   populateTypeDropdown(): void {
     if (this.combatant) {
       const otherTypes = this.selectOptions.filter((type) => type != this.combatant?.type);

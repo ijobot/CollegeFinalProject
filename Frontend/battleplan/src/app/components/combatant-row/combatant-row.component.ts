@@ -18,35 +18,35 @@ import { ModalService } from '../../services/modal.service';
           [ngClass]="combatant.type.toLowerCase()"
           class="light row-font-size"
           (click)="handleUpdateCombatant(modalText.updateName, modalContent.updateName)"
-          >
+        >
           {{ combatant.name }}
         </button>
       </div>
-    
+
       <!-- COMBATANT TYPE -->
       <div class="row-item row-type center-text hidden">
         <button
           [ngClass]="combatant.type.toLowerCase()"
           class="light row-font-size"
           (click)="handleUpdateCombatant(modalText.updateType, modalContent.updateType)"
-          >
+        >
           {{ combatant.type }}
         </button>
       </div>
-    
+
       <!-- COMBATANT SCORE -->
       @if (initiative$ | async) {
-        <div class="row-item row-score center-text">
-          <button
-            [ngClass]="combatant.type.toLowerCase()"
-            class="light row-font-size"
-            (click)="handleUpdateCombatant(modalText.updateScore, modalContent.updateScore)"
-            >
-            {{ combatant.score }}
-          </button>
-        </div>
+      <div class="row-item row-score center-text">
+        <button
+          [ngClass]="combatant.type.toLowerCase()"
+          class="light row-font-size"
+          (click)="handleUpdateCombatant(modalText.updateScore, modalContent.updateScore)"
+        >
+          {{ combatant.score }}
+        </button>
+      </div>
       }
-    
+
       <!-- DELETE ROW -->
       <div class="row-delete">
         <button (click)="handleRemoveCombatant(index)" aria-label="remove combatant from list">
@@ -54,7 +54,7 @@ import { ModalService } from '../../services/modal.service';
         </button>
       </div>
     </div>
-    `,
+  `,
   styles: ``,
 })
 export class CombatantRowComponent {
@@ -68,19 +68,12 @@ export class CombatantRowComponent {
   modalContent = ModalContent;
   initiative$ = this.combatantService.initiative$;
 
-  // getRowAndButtonColor(): Partial<CSSStyleDeclaration> {
-  //   const bgColor = {
-  //     'background-color': Utils.getColorSchemeFromType(this.combatant.type),
-  //   };
-  //   return bgColor;
-  // }
-
-  // Clicking the X button on a row
+  // Clicking the X button on a row deletes the combatant
   handleRemoveCombatant(index: number): void {
     this.combatantService.removeCombatant(index);
   }
 
-  // Clicking any attribute button on a row
+  // Clicking any attribute button on a row triggers the update modal
   handleUpdateCombatant(updateAttribute: ModalText, modalContent: ModalContent): void {
     this.modalService.setModalAppearance(
       this.combatant.type,

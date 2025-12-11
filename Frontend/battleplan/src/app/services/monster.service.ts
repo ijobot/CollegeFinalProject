@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ConvertedMonster } from '../models';
 import { Utils } from '../utils/utils';
-import { withFetch } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
