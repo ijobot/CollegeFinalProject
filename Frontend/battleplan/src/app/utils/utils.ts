@@ -6,7 +6,7 @@ export class Utils {
     monsterList.forEach((monster) => {
       convertedMonsterList.push({
         name: monster.name,
-        statBlockUrl: 'https://www.dndbeyond.com/monsters/' + monster.index,
+        statBlockUrl: monster.index,
       });
     });
     return convertedMonsterList;

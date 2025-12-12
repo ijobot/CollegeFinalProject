@@ -13,6 +13,18 @@ import { ModalService } from '../../services/modal.service';
   template: `
     <div class="row" [ngClass]="combatant.type.toLowerCase()">
       <!-- COMBATANT NAME -->
+      @if (combatant.statBlockUrl.length && combatant.type == 'Monster') {
+      <div class="row-item row-name center-text">
+        <a
+          class="monster-link"
+          [href]="'https://www.dndbeyond.com/monsters/' + combatant.statBlockUrl"
+          target="_blank"
+          >🔗</a
+        >
+      </div>
+      } @else {
+      <div class="row-item row-name center-text"></div>
+      }
       <div class="row-item row-name center-text">
         <button
           [ngClass]="combatant.type.toLowerCase()"
@@ -35,17 +47,17 @@ import { ModalService } from '../../services/modal.service';
       </div>
 
       <!-- COMBATANT SCORE -->
-      @if (initiative$ | async) {
       <div class="row-item row-score center-text">
         <button
           [ngClass]="combatant.type.toLowerCase()"
           class="light row-font-size"
           (click)="handleUpdateCombatant(modalText.updateScore, modalContent.updateScore)"
         >
+          @if (initiative$ | async) {
           {{ combatant.score }}
+          }
         </button>
       </div>
-      }
 
       <!-- DELETE ROW -->
       <div class="row-delete">

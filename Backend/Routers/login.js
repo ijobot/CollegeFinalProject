@@ -54,7 +54,7 @@ router.post("/login", async (req, res) => {
       // If either input is somehow left blank, send failure status
       res.json(emptyFields);
     } else {
-      const userList = await sql.query("select * from Users");
+      const userList = await sql.query("SELECT * FROM Users;");
       const usersArray = [];
 
       // Convert each record from an SQL IResult into a JavaScript Object to be able to work with data
@@ -115,7 +115,7 @@ router.post("/signup", async (req, res) => {
       // If either input is somehow left blank, send failure status
       res.json(emptyFields);
     } else {
-      const userList = await sql.query("select * from Users");
+      const userList = await sql.query("SELECT * FROM Users;");
       const usersArray = [];
 
       // Convert each record from an SQL IResult into a JavaScript Object to be able to work with data
@@ -137,7 +137,7 @@ router.post("/signup", async (req, res) => {
           `INSERT INTO Users VALUES ('${username}', '${password}')`
         );
         await sql.query(
-          `CREATE TABLE ${username}_SavedParty (id int IDENTITY(1,1) PRIMARY KEY, name varchar(50), type varchar(50), score int);`
+          `CREATE TABLE ${username}_SavedParty (id int IDENTITY(1,1) PRIMARY KEY, name varchar(50), type varchar(50), score int, statBlockUrl varchar(100));`
         );
         res.json(userProfileCreated);
       }

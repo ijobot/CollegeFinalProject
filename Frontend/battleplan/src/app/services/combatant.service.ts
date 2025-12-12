@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Combatant, CombatantType } from '../models';
 import { BackendServerService } from './backend-server.service';
 import { LocalStorageService } from './local-storage.service';
+import { MonsterService } from './monster.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,7 @@ import { LocalStorageService } from './local-storage.service';
 export class CombatantService {
   private localStorageService = inject(LocalStorageService);
   private backendServerService = inject(BackendServerService);
+  private monsterService = inject(MonsterService);
 
   private _combatants$ = new BehaviorSubject<Combatant[]>([]);
   private _initiative$ = new BehaviorSubject<boolean>(true);
@@ -26,12 +28,13 @@ export class CombatantService {
     this._initiative$.next(!this._initiative$.getValue());
   }
 
-  addCombatant(type: CombatantType, name: string, score: number): void {
+  addCombatant(type: CombatantType, name: string, score: number, statBlockUrl: string = ''): void {
     // Create new combatant object
     const newestCombatant: Combatant = {
       type,
       name,
       score,
+      statBlockUrl,
     };
 
     // Add to combatants array
@@ -101,6 +104,7 @@ export class CombatantService {
     const user = this.localStorageService.getData('Current User');
     if (user) {
       const userParsed = JSON.parse(user);
+      console.log('HEY JOE USERPARSED', userParsed);
       this.backendServerService.loadParty(userParsed.username).subscribe((data) => {
         const updatedCombatants = [...data];
         this.sortCombatants(updatedCombatants);

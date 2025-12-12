@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 /* ----------------- */
 /* Custom properties */
 /* ----------------- */
@@ -72,6 +74,13 @@ $fantasy-bottomright: #8b7f68;
   border-bottom: solid $size $bottomright;
   border-left: solid $size $topleft;
 }
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+@include mat.autocomplete-overrides(
+  (
+    background-color: white,
+  )
+);
 
 /* ------------------ */
 /* Baseline CSS Reset */
@@ -374,7 +383,7 @@ app-theme-selection a:hover {
 
 .row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr min-content;
+  grid-template-columns: 32px 1fr 1fr 1fr min-content;
   padding: var(--spacing-m);
   border-top: 4px solid rgba(0, 0, 0, 0.2);
   border-right: 4px solid rgba(0, 0, 0, 0.5);
@@ -389,6 +398,10 @@ app-theme-selection a:hover {
       height: 100%;
       border: 2px solid transparent;
       padding: 0 var(--spacing-l);
+    }
+
+    .monster-link {
+      font-size: 2rem;
 
       &:hover {
         border: 2px solid var(--button-bg-border);
@@ -682,7 +695,8 @@ app-theme-selection a:hover {
 /* ------------- */
 
 .default-theme {
-  button:hover:enabled:not(:active) {
+  button:hover:enabled:not(:active),
+  a.monster-link:hover {
     @include update-outline-color($default-page-bg-nav-text-and-outline);
     cursor: pointer;
   }
@@ -803,7 +817,8 @@ app-theme-selection a:hover {
     @include update-border-colors(4px, $fantasy-topleft, $fantasy-bottomright);
   }
 
-  button:hover:enabled:not(:active) {
+  button:hover:enabled:not(:active),
+  a.monster-link:hover {
     @include update-outline-color($fantasy-page-bg-nav-text-and-outline);
     cursor: pointer;
   }

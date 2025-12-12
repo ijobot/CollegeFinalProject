@@ -4,7 +4,6 @@ import { CombatantType, ModalText, ModalContent, Combatant } from '../../models'
 import { CombatantService } from '../../services/combatant.service';
 import { ModalService } from '../../services/modal.service';
 import { CommonModule } from '@angular/common';
-import { ClickOutsideDirective } from '../../utils/clickoutside.directive';
 import { CombatantEntryFormComponent } from '../combatant-entry-form/combatant-entry-form.component';
 import { LoginFormComponent } from '../login-form/login-form.component';
 import { UserService } from '../../services/user.service';
@@ -12,10 +11,10 @@ import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [CommonModule, CombatantEntryFormComponent, ClickOutsideDirective, LoginFormComponent],
+  imports: [CommonModule, CombatantEntryFormComponent, LoginFormComponent],
   template: `
     <div class="overlay">
-      <div class="main-modal" (clickOutside)="handleCloseModal()">
+      <div class="main-modal">
         @if (modalAppearance$ | async; as modal) {
         <div class="content-container content" [ngClass]="modal.combatantType.toLowerCase()">
           <h1 class="title">{{ modal.modalText }}</h1>
@@ -140,7 +139,6 @@ import { UserService } from '../../services/user.service';
 export class ModalComponent {
   private modalService = inject(ModalService);
   private combatantService = inject(CombatantService);
-  private userService = inject(UserService);
 
   modalAppearance$ = this.modalService.modalAppearance$;
   combatantType: CombatantType = CombatantType.default;

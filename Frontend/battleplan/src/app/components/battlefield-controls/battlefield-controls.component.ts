@@ -4,6 +4,7 @@ import { ModalService } from '../../services/modal.service';
 import { CombatantService } from '../../services/combatant.service';
 import { CommonModule } from '@angular/common';
 import { BlurAfterClickDirective } from '../../utils/blur-after-click.directive';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-battlefield-controls',
@@ -52,7 +53,17 @@ import { BlurAfterClickDirective } from '../../utils/blur-after-click.directive'
         <button class="button-font-size" blurAfterClick (click)="handleClearAllClick()">
           Clear All
         </button>
+        <button
+          id="share"
+          class="button-font-size"
+          blurAfterClick
+          (click)="handleGeneratePicture()"
+          [disabled]="!(combatants$ | async)?.length"
+        >
+          Snapshot
+        </button>
       </div>
+      <a href="" id="downloadLink" download hidden></a>
     </div>
   `,
   styles: ``,
@@ -65,11 +76,27 @@ export class BattlefieldControlsComponent {
   modalText = ModalText;
   initiative$ = this.combatantService.initiative$;
   combatants$ = this.combatantService.combatants$;
+  download: string = '';
 
   // Adding a combatant
   handleAddCombatantClick(type: CombatantType, modalText: ModalText): void {
     this.modalService.setModalAppearance(type, modalText, ModalContent.addCombatant);
     this.modalService.openModal();
+  }
+
+  // Take a snapshot - triggers automatic download so user can send file to a group chat on any platform
+  handleGeneratePicture(): void {
+    const battlefield = document.getElementById('canvas') as HTMLElement;
+    const downloadLink = document.getElementById('downloadLink') as HTMLElement;
+    const style = document.createElement('style');
+    document.head.appendChild(style);
+    style.sheet?.insertRule('body > div:last-child img { display: inline-block; }');
+    html2canvas(battlefield).then((canvas) => {
+      downloadLink.setAttribute('href', canvas.toDataURL());
+    });
+    setTimeout(() => {
+      downloadLink.click();
+    }, 1000);
   }
 
   // Toggling initiative on and off (some games don't use it)

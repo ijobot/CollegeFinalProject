@@ -1,18 +1,28 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CombatantType, ModalText, Combatant } from '../../models';
-import { CombatantService } from '../../services/combatant.service';
-import { ModalService } from '../../services/modal.service';
-import { Utils } from '../../utils/utils';
 import { A11yModule } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, Input } from '@angular/core';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
+import { CombatantType, ModalText, ConvertedMonster, Combatant } from '../../models';
+import { CombatantService } from '../../services/combatant.service';
+import { ModalService } from '../../services/modal.service';
+import { MonsterService } from '../../services/monster.service';
 import { FormFocusDirective } from '../../utils/autofocus.directive';
+import { Utils } from '../../utils/utils';
+import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-combatant-entry-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormFocusDirective, MatSelectModule, A11yModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    FormFocusDirective,
+    MatSelectModule,
+    A11yModule,
+    MatAutocomplete,
+    MatAutocompleteModule,
+  ],
   template: `
     <!-- COMBATANT CREATION -->
     @if (!updateAttribute) {
@@ -20,8 +30,10 @@ import { FormFocusDirective } from '../../utils/autofocus.directive';
       <form [formGroup]="combatantCreationForm" (ngSubmit)="onCreationSubmit()" cdkTrapFocus>
         <div class="field">
           <div class="label-and-input">
-            <label for="name">Combatant Name:</label
-            ><input
+            <label for="name">Combatant Name:</label>
+            @if (modalText == 'Add Monster') {
+            <input
+              [matAutocomplete]="auto"
               formFocus
               class="large-field"
               id="name"
@@ -29,6 +41,21 @@ import { FormFocusDirective } from '../../utils/autofocus.directive';
               [placeholder]="name?.dirty && name?.value == '' ? 'Name required' : 'Enter name'"
               formControlName="name"
             />
+            <mat-autocomplete #auto="matAutocomplete">
+              @for (monster of filteredMonsterList; track monster; let i = $index) {
+              <mat-option [value]="monster.name">{{ monster.name }}</mat-option>
+              }
+            </mat-autocomplete>
+            } @else {
+            <input
+              formFocus
+              class="large-field"
+              id="name"
+              type="text"
+              [placeholder]="name?.dirty && name?.value == '' ? 'Name required' : 'Enter name'"
+              formControlName="name"
+            />
+            }
           </div>
         </div>
         @if (initiative$ | async) {
@@ -168,12 +195,15 @@ import { FormFocusDirective } from '../../utils/autofocus.directive';
 export class CombatantEntryFormComponent implements OnInit {
   private modalService = inject(ModalService);
   private combatantService = inject(CombatantService);
+  private monsterService = inject(MonsterService);
 
   @Input() combatantType: CombatantType = CombatantType.default;
   @Input() modalText: ModalText = ModalText.player;
   @Input() updateAttribute?: string;
 
   initiative$ = this.combatantService.initiative$;
+  monsterList: ConvertedMonster[] = [];
+  filteredMonsterList: ConvertedMonster[] = [];
   combatant: Combatant | undefined = this.modalService.getCombatantToUpdate();
   selectOptions: CombatantType[] = [CombatantType.player, CombatantType.monster, CombatantType.npc];
   selection: CombatantType = CombatantType.player;
@@ -191,6 +221,13 @@ export class CombatantEntryFormComponent implements OnInit {
       updateName: new FormControl<string>(''),
       updateScore: new FormControl<number>(0),
       updateType: new FormControl<CombatantType>(CombatantType.player),
+    });
+    this.combatantCreationForm.get('name')?.valueChanges.subscribe((response) => {
+      this.filterMonsters(response);
+    });
+    this.monsterService.monsterList$.subscribe((data) => {
+      this.monsterList = data;
+      this.filteredMonsterList = data;
     });
   }
 
@@ -221,16 +258,35 @@ export class CombatantEntryFormComponent implements OnInit {
     );
   }
 
+  filterMonsters(enteredText: string): void {
+    this.filteredMonsterList = this.monsterList.filter((item) => {
+      return item.name.toLowerCase().indexOf(enteredText.toLowerCase()) > -1;
+    });
+  }
+
   onCreationSubmit(): void {
     // Since we don't have a combatant yet, configure combatantType based on modal's text
     const combatantType = Utils.getTypeFromModalText(this.modalText);
 
     if (this.combatantCreationForm.valid) {
-      this.combatantService.addCombatant(
-        combatantType,
-        this.combatantCreationForm.value.name,
-        this.combatantCreationForm.value.score
-      );
+      if (combatantType === 'Monster') {
+        const statBlock = this.monsterService.getMonsterStatBlockLink(
+          this.combatantCreationForm.value.name
+        );
+        this.combatantService.addCombatant(
+          combatantType,
+          this.combatantCreationForm.value.name,
+          this.combatantCreationForm.value.score,
+          statBlock
+        );
+      } else {
+        this.combatantService.addCombatant(
+          combatantType,
+          this.combatantCreationForm.value.name,
+          this.combatantCreationForm.value.score,
+          ''
+        );
+      }
       this.modalService.closeModal();
     }
   }

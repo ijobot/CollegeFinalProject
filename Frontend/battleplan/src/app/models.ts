@@ -23,6 +23,7 @@ export interface Combatant {
   type: CombatantType;
   name: string;
   score: number;
+  statBlockUrl: string;
 }
 
 export enum CombatantType {

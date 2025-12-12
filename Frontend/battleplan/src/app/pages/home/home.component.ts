@@ -1,6 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { MonsterService } from '../../services/monster.service';
 
 @Component({
   selector: 'app-home',
@@ -50,10 +49,4 @@ import { MonsterService } from '../../services/monster.service';
   styles: ``,
   standalone: true,
 })
-export class HomeComponent implements OnInit {
-  private monsterService = inject(MonsterService);
-
-  ngOnInit(): void {
-    this.monsterService.getMonsters();
-  }
-}
+export class HomeComponent {}

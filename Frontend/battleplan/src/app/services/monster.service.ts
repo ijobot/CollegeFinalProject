@@ -17,7 +17,7 @@ export class MonsterService {
 
   async getMonsters() {
     // Is automatically called by the HomeComponent after a successful login
-    if (this._monsterList$.getValue().length === 0) {
+    if (!this._monsterList$.getValue().length) {
       // Only performs call once so user can switch between pages without constantly retrieving the same data
       try {
         const response = await fetch(this.URL);
@@ -28,8 +28,8 @@ export class MonsterService {
         const { results } = await response.json();
         const convertedMonsters = Utils.convertMonsterList(results);
         // Uses a utility function to convert the API response to an array of objects the application can more easily work with
-        console.log(convertedMonsters);
         this._monsterList$.next(convertedMonsters);
+        console.log(convertedMonsters);
       } catch (error) {
         // Error handling so application doesn't crash if there is ever an issue with the external API
         if (error instanceof Error) {
@@ -40,5 +40,10 @@ export class MonsterService {
       return;
       // If monster list is already loaded, this function will fail gracefully
     }
+  }
+
+  getMonsterStatBlockLink(monsterName: string): string {
+    const test = this._monsterList$.getValue().filter((monster) => monster.name === monsterName);
+    return test[0].statBlockUrl;
   }
 }
