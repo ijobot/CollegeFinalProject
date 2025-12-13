@@ -23,7 +23,6 @@ import { ConvertedMonster } from '../../models';
     <div class="page-container">
       <!-- LOGO AND BUTTON MENU -->
       <div class="battlefield-container">
-        <div class="controls-tab">&#x21C4;</div>
         <div class="content-container controls-grid-item">
           <app-battlefield-controls></app-battlefield-controls>
         </div>

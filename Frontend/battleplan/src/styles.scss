@@ -271,30 +271,6 @@ select:focus:enabled {
   width: 100%;
   gap: var(--spacing-l);
 
-  .controls-tab {
-    position: absolute;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    line-height: 1;
-    height: 60px;
-    width: 50px;
-    top: 50%;
-    left: -28px;
-    transform: translateY(-50%);
-    z-index: 100;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    @include update-text-color($default-page-bg-nav-text-and-outline);
-    @include update-background-color($default-container-bg);
-    @include update-border-colors(
-      4px,
-      $default-page-bg-nav-text-and-outline,
-      $default-page-bg-nav-text-and-outline
-    );
-  }
-
   .controls-grid-item {
     padding: var(--spacing-m);
     height: 100%;
@@ -560,38 +536,6 @@ app-theme-selection a:hover {
 }
 
 @media only screen and (max-width: 800px) {
-  .battlefield-container {
-    position: relative;
-    grid-template-columns: 1fr;
-    grid-template-areas: 'combat-list';
-
-    .controls-tab {
-      display: flex;
-    }
-
-    .controls-grid-item {
-      display: none;
-      margin: 0 auto;
-
-      .main-button-menu {
-        gap: var(--spacing-m);
-
-        .buttons-array {
-          flex-direction: row;
-          justify-content: center;
-        }
-      }
-    }
-
-    .combatants-grid-item {
-      grid-area: combat-list;
-      padding: var(--spacing-m);
-
-      .combatants {
-        gap: var(--spacing-m);
-      }
-    }
-  }
 }
 
 @media only screen and (max-width: 700px) {
