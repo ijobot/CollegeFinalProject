@@ -536,6 +536,59 @@ app-theme-selection a:hover {
 }
 
 @media only screen and (max-width: 800px) {
+  .battlefield-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr min-content;
+    width: 100%;
+    gap: var(--spacing-l);
+
+    .controls-grid-item {
+      padding: var(--spacing-m);
+      height: 100%;
+      order: 2;
+
+      .main-button-menu {
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr;
+        height: 100%;
+        justify-content: space-between;
+
+        .buttons-array {
+          display: flex;
+          flex-wrap: wrap;
+          flex-direction: row;
+          gap: var(--spacing-m);
+          justify-content: space-between;
+
+          &:first-of-type {
+            margin-bottom: var(--spacing-m);
+          }
+
+          button {
+            padding-left: var(--spacing-m);
+            padding-right: var(--spacing-m);
+            flex-grow: 1;
+          }
+        }
+      }
+    }
+
+    .combatants-grid-item {
+      .combatants {
+        display: flex;
+        flex-direction: column;
+        min-width: 100%;
+        gap: var(--spacing-l);
+        overflow-x: auto;
+
+        .row {
+          width: 100%;
+        }
+      }
+    }
+  }
 }
 
 @media only screen and (max-width: 700px) {
@@ -577,12 +630,16 @@ app-theme-selection a:hover {
   .row {
     display: grid;
     gap: 0;
-    grid-template-columns: 1fr min-content;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: min-content 1fr min-content;
+    grid-template-rows: repeat(min-content);
     grid-template-areas:
-      'name delete'
-      'type .'
-      'score .';
+      'link name delete'
+      '. type .'
+      '. score .';
+
+    .row-link {
+      grid-area: link;
+    }
 
     .row-name {
       grid-area: name;

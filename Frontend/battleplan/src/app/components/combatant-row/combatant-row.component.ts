@@ -16,7 +16,7 @@ import { ModalService } from '../../services/modal.service';
       @if (combatant.statBlockUrl.length && combatant.type == 'Monster') {
       <!-- If the combatantType is Monster and the name was chosen from the autocomplete's monster codex,
          this applies the link icon for users to click and visit thier stat block page on the official website. -->
-      <div class="row-item row-name center-text">
+      <div class="row-item row-link center-text">
         <a
           class="monster-link"
           [href]="'https://www.dndbeyond.com/monsters/' + combatant.statBlockUrl"
