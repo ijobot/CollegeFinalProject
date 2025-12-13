@@ -10,6 +10,8 @@ export class AuthGuardService implements CanActivate {
   private router = inject(Router);
 
   canActivate(): boolean {
+    // Check LocalStorage to see if a currentUser is logged in, and if so, block them from manually entering the URL for login.
+    // This ensures they do not attempt to sign in under a second profile and potentially corrupt the database.
     const currentUser = !!this.localStorageService.getData('Current User');
     if (currentUser) {
       this.router.navigate(['/home']);

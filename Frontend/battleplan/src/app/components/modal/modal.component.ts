@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { CombatantEntryFormComponent } from '../combatant-entry-form/combatant-entry-form.component';
 import { LoginFormComponent } from '../login-form/login-form.component';
 import { UserService } from '../../services/user.service';
+import { ClickOutsideDirective } from '../../utils/clickoutside.directive';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [CommonModule, CombatantEntryFormComponent, LoginFormComponent],
+  imports: [CommonModule, CombatantEntryFormComponent, LoginFormComponent, ClickOutsideDirective],
   template: `
     <div class="overlay">
       <div class="main-modal">
@@ -41,6 +42,7 @@ import { UserService } from '../../services/user.service';
           @if (modal.modalContent == 'updateType') {
           <ng-content>
             <app-combatant-entry-form
+              (clickOutside)="handleCloseModal()"
               [updateAttribute]="'type'"
               [combatantType]="combatantType"
               [modalText]="modal.modalText"
@@ -51,6 +53,7 @@ import { UserService } from '../../services/user.service';
           @if (modal.modalContent == 'updateScore') {
           <ng-content>
             <app-combatant-entry-form
+              (clickOutside)="handleCloseModal()"
               [updateAttribute]="'score'"
               [combatantType]="combatantType"
               [modalText]="modal.modalText"
@@ -59,7 +62,7 @@ import { UserService } from '../../services/user.service';
           }
           <!-- MODAL CONTENTS FOR SAVING A PARTY -->
           @if (modal.modalContent == 'saveParty') {
-          <div class="party-function-buttons">
+          <div class="party-function-buttons" (clickOutside)="handleCloseModal()">
             <button (click)="handleSaveAll()" [disabled]="!(combatants$ | async)?.length">
               Save Party
             </button>
@@ -68,14 +71,14 @@ import { UserService } from '../../services/user.service';
           }
           <!-- MODAL CONTENTS FOR LOADING A PARTY -->
           @if (modal.modalContent == 'loadParty') {
-          <div class="party-function-buttons">
+          <div class="party-function-buttons" (clickOutside)="handleCloseModal()">
             <button (click)="handleLoadSavedParty()">Load Party</button>
             <button (click)="handleCloseModal()">Cancel</button>
           </div>
           }
           <!-- MODAL CONTENTS FOR CONFIRMING A "CLEAR ALL" -->
           @if (modal.modalContent == 'clearAll') {
-          <div class="party-function-buttons">
+          <div class="party-function-buttons" (clickOutside)="handleCloseModal()">
             <button (click)="handleClearAll()">Yes</button>
             <button (click)="handleCloseModal()">No</button>
           </div>
@@ -83,13 +86,19 @@ import { UserService } from '../../services/user.service';
           <!-- MODAL CONTENTS FOR LOGGING IN -->
           @if (modal.modalContent == 'logIn') {
           <ng-content>
-            <app-login-form [entryType]="'logIn'"></app-login-form>
+            <app-login-form
+              [entryType]="'logIn'"
+              (clickOutside)="handleCloseModal()"
+            ></app-login-form>
           </ng-content>
           }
           <!-- MODAL CONTENTS FOR SIGNING UP -->
           @if (modal.modalContent == 'signUp') {
           <ng-content>
-            <app-login-form [entryType]="'signUp'"></app-login-form>
+            <app-login-form
+              [entryType]="'signUp'"
+              (clickOutside)="handleCloseModal()"
+            ></app-login-form>
           </ng-content>
           }
         </div>
@@ -97,6 +106,7 @@ import { UserService } from '../../services/user.service';
       </div>
     </div>
   `,
+  // Again, forms are the only parts of this application that have thier own dedicated CSS for easier management.
   styles: `
   .overlay {
   position: absolute;
@@ -142,9 +152,6 @@ export class ModalComponent {
 
   modalAppearance$ = this.modalService.modalAppearance$;
   combatantType: CombatantType = CombatantType.default;
-  modalText: ModalText = ModalText.clear;
-  modalContent: ModalContent = ModalContent.clearAll;
-  combatant?: Combatant;
   combatants$: Observable<Combatant[]> = this.combatantService.combatants$;
 
   handleCloseModal(): void {

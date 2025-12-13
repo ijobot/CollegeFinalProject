@@ -26,6 +26,7 @@ import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autoco
   template: `
     <!-- COMBATANT CREATION -->
     @if (!updateAttribute) {
+    <!-- If we're not updating a current combatant, we get the full form. -->
     <ng-content>
       <form [formGroup]="combatantCreationForm" (ngSubmit)="onCreationSubmit()" cdkTrapFocus>
         <div class="field">
@@ -83,14 +84,34 @@ import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autoco
       </form>
     </ng-content>
     } @else {
+    <!-- If we're updating a current combatant, we only get the input specific to what we're updating (name, type, or score). -->
     <form [formGroup]="combatantUpdateForm" (ngSubmit)="onUpdateSubmit()" cdkTrapFocus>
       <!-- NAME UPDATE FORM -->
       @if (updateAttribute == 'name') {
       <ng-content>
         <div class="field">
           <div class="label-and-input">
-            <label for="updateName">Combatant Name:</label
-            ><input
+            <label for="updateName">Combatant Name:</label>
+            @if (combatant?.type == 'Monster') {
+            <!-- If updating a monster's name, ensure we bring the autocomplate form back up so the user can choose another monster if they wish. -->
+            <input
+              [matAutocomplete]="auto"
+              formFocus
+              class="large-field"
+              id="updateName"
+              type="text"
+              [placeholder]="
+                updateName?.dirty && updateName?.value == '' ? 'Name required' : 'Enter name'
+              "
+              formControlName="updateName"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              @for (monster of filteredMonsterList; track monster; let i = $index) {
+              <mat-option [value]="monster.name">{{ monster.name }}</mat-option>
+              }
+            </mat-autocomplete>
+            } @else {
+            <input
               formFocus
               class="large-field"
               id="updateName"
@@ -98,6 +119,7 @@ import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autoco
               [placeholder]="combatant ? combatant.name : ''"
               formControlName="updateName"
             />
+            }
           </div>
         </div>
         <div class="buttons">
@@ -213,18 +235,22 @@ export class CombatantEntryFormComponent implements OnInit {
   combatantUpdateForm: FormGroup;
 
   constructor() {
+    // In the creation form, the CombatantType is discerned by the modal text.
     this.combatantCreationForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
       score: new FormControl('0', [Validators.required]),
     });
+    // In the update form, the CombatantType is already known.
     this.combatantUpdateForm = new FormGroup({
       updateName: new FormControl<string>(''),
       updateScore: new FormControl<number>(0),
       updateType: new FormControl<CombatantType>(CombatantType.player),
     });
+    // Allows for autocomplete dropdown to dynamically adjust options as user types in the the input.
     this.combatantCreationForm.get('name')?.valueChanges.subscribe((response) => {
       this.filterMonsters(response);
     });
+    // Having both lists allows for the autocomplete form to react to the user deleting their input (all monsters come back as options).
     this.monsterService.monsterList$.subscribe((data) => {
       this.monsterList = data;
       this.filteredMonsterList = data;
@@ -248,7 +274,7 @@ export class CombatantEntryFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // If updating, set the name, type, and score of the combatant
+    // If updating, set the name, type, and score of the combatant.
     this.combatantUpdateForm.controls['updateName'].setValue(
       this.combatant ? this.combatant.name : ''
     );
@@ -258,6 +284,7 @@ export class CombatantEntryFormComponent implements OnInit {
     );
   }
 
+  // Helper function for the autocomplete list.
   filterMonsters(enteredText: string): void {
     this.filteredMonsterList = this.monsterList.filter((item) => {
       return item.name.toLowerCase().indexOf(enteredText.toLowerCase()) > -1;
@@ -265,11 +292,13 @@ export class CombatantEntryFormComponent implements OnInit {
   }
 
   onCreationSubmit(): void {
-    // Since we don't have a combatant yet, configure combatantType based on modal's text
+    // Since we don't have a combatant yet, configure combatantType based on modal text.
     const combatantType = Utils.getTypeFromModalText(this.modalText);
 
     if (this.combatantCreationForm.valid) {
       if (combatantType === 'Monster') {
+        // If combatant is a new monster, check to see if a monster was chosen from the autocomplete list,
+        // or if the user typed in some other name.  Add statBlock if possible, or supply empty string.
         const statBlock = this.monsterService.getMonsterStatBlockLink(
           this.combatantCreationForm.value.name
         );
@@ -291,26 +320,35 @@ export class CombatantEntryFormComponent implements OnInit {
     }
   }
 
-  // Slightly different functionality depending on which attribute is being changed
+  // Slightly different functionality depending on which attribute is being changed.
   onUpdateSubmit(): void {
     if (this.combatant) {
       if (this.updateAttribute == 'name') {
+        // If updating a monster's name, ensure the user can still choose another monster or just type whatever they wish.
+        const statBlock = this.monsterService.getMonsterStatBlockLink(this.updateName?.value);
         this.combatantService.editCombatant(
           this.combatant,
           this.updateAttribute,
-          this.updateName?.value
+          this.updateName?.value,
+          statBlock
         );
       }
 
       if (this.updateAttribute == 'type') {
-        this.combatantService.editCombatant(this.combatant, this.updateAttribute, this.selection);
+        this.combatantService.editCombatant(
+          this.combatant,
+          this.updateAttribute,
+          this.selection,
+          this.combatant.statBlockUrl
+        );
       }
 
       if (this.updateAttribute == 'score') {
         this.combatantService.editCombatant(
           this.combatant,
           this.updateAttribute,
-          this.updateScore?.value
+          this.updateScore?.value,
+          this.combatant.statBlockUrl
         );
       }
       this.modalService.closeModal();
@@ -325,6 +363,7 @@ export class CombatantEntryFormComponent implements OnInit {
     }
   }
 
+  // Updates chosen player type on the dropdown menu so value can be sent to updateCombatant.
   onSelection(value: string): void {
     this.selectionMade = true;
     this.selection = value as CombatantType;

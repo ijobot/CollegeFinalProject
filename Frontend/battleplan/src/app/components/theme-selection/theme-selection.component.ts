@@ -15,6 +15,8 @@ import { CombatantService } from '../../services/combatant.service';
         <p>Themes:</p>
         <a (click)="handleThemeSelection(theme.default)"> - Default</a>
         <a (click)="handleThemeSelection(theme.fantasy)"> - Fantasy</a>
+        <a (click)="handleThemeSelection(theme.grimdark)"> - Grimdark</a>
+        <a (click)="handleThemeSelection(theme.cyberpunk)"> - Cyberpunk</a>
         <div class="line-break"></div>
         <a (click)="handleSignOut()">Sign Out</a>
       </div>
@@ -57,7 +59,7 @@ export class ThemeSelectionComponent {
   }
 
   // Added to this component for ease, as redevloping the dropdown would be too time consuming.
-  // Will update this in a future iteration, as this functionality is better suited elsewhere.
+  // Will update this in a future iteration, as this functionality is better suited as its own component.
   handleSignOut(): void {
     this.userService.logUserOut();
     this.combatantService.clearAllCombatants();

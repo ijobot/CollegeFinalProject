@@ -34,7 +34,7 @@ import html2canvas from 'html2canvas';
         </button>
       </div>
 
-      <!-- INITIATIVE/SAVE/LOAD/CLEAR BUTTONS -->
+      <!-- INITIATIVE/SAVE/LOAD/CLEAR/SNAPSHOT BUTTONS -->
       <div class="buttons-array function-buttons">
         <button class="button-font-size" blurAfterClick (click)="handleToggleInitiative()">
           Initiative {{ (initiative$ | async) ? 'Off' : 'On' }}
@@ -76,35 +76,37 @@ export class BattlefieldControlsComponent {
   modalText = ModalText;
   initiative$ = this.combatantService.initiative$;
   combatants$ = this.combatantService.combatants$;
-  download: string = '';
 
-  // Adding a combatant
+  // Setting and openning the modal to add a combatant.
   handleAddCombatantClick(type: CombatantType, modalText: ModalText): void {
     this.modalService.setModalAppearance(type, modalText, ModalContent.addCombatant);
     this.modalService.openModal();
   }
 
-  // Take a snapshot - triggers automatic download so user can send file to a group chat on any platform
+  // Take a snapshot - triggers automatic download so user can drag and drop a PNG file into a group chat on any platform.
   handleGeneratePicture(): void {
     const battlefield = document.getElementById('canvas') as HTMLElement;
     const downloadLink = document.getElementById('downloadLink') as HTMLElement;
+    // Resolving rendering issues in the preflight prerparation (text is lowered through a bug in the library).
     const style = document.createElement('style');
     document.head.appendChild(style);
     style.sheet?.insertRule('body > div:last-child img { display: inline-block; }');
+    // Taking the snapshot of just the combatant list area of the page and then setting it as the download file on the hidden link.
     html2canvas(battlefield).then((canvas) => {
       downloadLink.setAttribute('href', canvas.toDataURL());
     });
+    // Giving 1 full second for the PNG file to be created and attached to the link before clicking.
     setTimeout(() => {
       downloadLink.click();
     }, 1000);
   }
 
-  // Toggling initiative on and off (some games don't use it)
+  // Toggling initiative on and off (some games don't use it).
   handleToggleInitiative(): void {
     this.combatantService.toggleInitiative();
   }
 
-  // Saving a party
+  // Setting and openning the modal to save a party.
   handleSavePartyClick(): void {
     this.modalService.setModalAppearance(
       CombatantType.default,
@@ -114,7 +116,7 @@ export class BattlefieldControlsComponent {
     this.modalService.openModal();
   }
 
-  // Loading a saved party
+  // Setting and openning the modal to load a previously saved party.
   handleLoadSavedPartyClick(): void {
     this.modalService.setModalAppearance(
       CombatantType.default,
@@ -124,7 +126,8 @@ export class BattlefieldControlsComponent {
     this.modalService.openModal();
   }
 
-  // Clearing the list
+  // Setting and openning the modal to be able to clear the current on-screen list.
+  // This does not effect the database.
   handleClearAllClick(): void {
     this.modalService.setModalAppearance(
       CombatantType.default,

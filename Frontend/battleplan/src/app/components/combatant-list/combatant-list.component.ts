@@ -10,16 +10,14 @@ import { CombatantRowComponent } from '../combatant-row/combatant-row.component'
   template: `
     <div class="combatants">
       @for (combatant of combatants$ | async; track combatant; let i = $index) {
-        <app-combatant-row
-          [combatant]="combatant"
-          [index]="i"
-        ></app-combatant-row>
+      <app-combatant-row [combatant]="combatant" [index]="i"></app-combatant-row>
       }
     </div>
-    `,
+  `,
   styles: ``,
 })
 export class CombatantListComponent {
+  // Controls the list of combatants and passes down the information plus the index for proper sorting in the child component.
   private combatantService = inject(CombatantService);
 
   combatants$ = this.combatantService.combatants$;

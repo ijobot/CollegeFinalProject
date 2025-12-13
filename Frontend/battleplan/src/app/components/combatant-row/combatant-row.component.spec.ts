@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CombatantRow } from './combatant-row.component';
+import { CombatantRowComponent } from './combatant-row.component';
 
-describe('CombatantRow', () => {
-  let component: CombatantRow;
-  let fixture: ComponentFixture<CombatantRow>;
+describe('CombatantRowComponent', () => {
+  let component: CombatantRowComponent;
+  let fixture: ComponentFixture<CombatantRowComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CombatantRow]
-    })
-    .compileComponents();
+      imports: [CombatantRowComponent],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(CombatantRow);
+    fixture = TestBed.createComponent(CombatantRowComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

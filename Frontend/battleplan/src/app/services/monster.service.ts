@@ -42,8 +42,10 @@ export class MonsterService {
     }
   }
 
+  // Helper function for when a user creates or updates a monster.  Can also return an empty string
+  // whenever a user decides to type in a name not on the monster list.
   getMonsterStatBlockLink(monsterName: string): string {
     const test = this._monsterList$.getValue().filter((monster) => monster.name === monsterName);
-    return test[0].statBlockUrl;
+    return test[0]?.statBlockUrl || '';
   }
 }

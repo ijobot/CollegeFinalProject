@@ -23,6 +23,8 @@ export class ModalService {
     this.modalAppearance$ = this._modalAppearance$.asObservable();
   }
 
+  // The modal's appearance is set by whichever component calls for it to be openned.
+  // The contents (text, color, inputs, and functionality) are passed in, making this modal extremely adaptable.
   setModalAppearance(
     combatantType: CombatantType,
     modalText: ModalText,

@@ -52,6 +52,35 @@ $fantasy-container-bg: #1b3022;
 $fantasy-topleft: #4b3f30;
 $fantasy-bottomright: #8b7f68;
 
+/* ---------------------- */
+/* Cyberpunk Theme Mixins */
+/* ---------------------- */
+
+// Combatant, Modal, and Row Colors
+$cyberpunk-player-and-link-hover: #15dfdf;
+$cyberpunk-monster: #f320c5;
+$cyberpunk-npc: #f3f719;
+// Container Colors
+$cyberpunk-page-bg-nav-text-and-outline: #00ff00;
+$cyberpunk-container-bg: #060b24;
+// Border Colors
+$cyberpunk-topleft: #661369;
+$cyberpunk-bottomright: #b911b1;
+
+/* --------------------- */
+/* Grimdark Theme Mixins */
+/* --------------------- */
+
+$grimdark-player-and-link-hover: #e47474;
+$grimdark-monster: #d42929;
+$grimdark-npc: #9e6b6b;
+// Container Colors
+$grimdark-page-bg-nav-text-and-outline: #dbc3c4;
+$grimdark-container-bg: #0e0101;
+// Border Colors
+$grimdark-topleft: #584141;
+$grimdark-bottomright: #aa7373;
+
 /* --------------- */
 /* Mixin Functions */
 /* --------------- */
@@ -75,10 +104,9 @@ $fantasy-bottomright: #8b7f68;
   border-left: solid $size $topleft;
 }
 
-// Customize the entire app. Change :root to your selector if you want to scope the styles.
 @include mat.autocomplete-overrides(
   (
-    background-color: white,
+    background-color: #eeeeee,
   )
 );
 
@@ -393,6 +421,8 @@ app-theme-selection a:hover {
   gap: 0.5em;
 
   .row-item {
+    align-content: center;
+
     button {
       width: fit-content;
       height: 100%;
@@ -881,6 +911,278 @@ app-theme-selection a:hover {
     }
     .npc-text {
       @include update-text-color($fantasy-npc);
+    }
+  }
+}
+
+/* --------------- */
+/* Cyberpunk Theme */
+/* --------------- */
+
+.cyberpunk-theme {
+  *:not(mat-icon) {
+    font-family: 'Orbitron', sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    line-height: 1;
+  }
+
+  .main-nav {
+    @include update-background-color($cyberpunk-container-bg);
+    @include update-text-color($cyberpunk-page-bg-nav-text-and-outline);
+
+    .nav-logo {
+      @include update-text-color($cyberpunk-page-bg-nav-text-and-outline);
+    }
+
+    .nav-menu {
+      a {
+        @include update-text-color($cyberpunk-page-bg-nav-text-and-outline);
+      }
+
+      a:hover {
+        @include update-text-color($cyberpunk-player-and-link-hover);
+        text-decoration: underline;
+      }
+
+      .active-link {
+        @include update-text-color($cyberpunk-player-and-link-hover);
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .dropdown-container {
+    .themes-link:hover {
+      @include update-text-color($cyberpunk-player-and-link-hover);
+    }
+  }
+
+  app-theme-selection a:hover {
+    @include update-text-color($cyberpunk-player-and-link-hover);
+  }
+
+  .page-container,
+  .main-modal {
+    background-image: url('../src/app/images/neon.jpg');
+    background-size: cover;
+    background-position: center bottom;
+    @include update-background-color($cyberpunk-container-bg);
+    padding: calc(var(--spacing-l) * 1.5);
+    gap: calc(var(--spacing-l) * 1.5);
+  }
+
+  .main-modal {
+    @include update-border-colors(8px, $cyberpunk-bottomright, $cyberpunk-topleft);
+
+    .content-container {
+      @include update-border-colors(8px, $cyberpunk-topleft, $cyberpunk-bottomright);
+    }
+  }
+
+  .content-container {
+    @include update-border-colors(8px, $cyberpunk-topleft, $cyberpunk-bottomright);
+  }
+
+  button:hover:enabled:not(:active) {
+    @include update-outline-color($cyberpunk-page-bg-nav-text-and-outline);
+    cursor: pointer;
+  }
+
+  button:disabled {
+    filter: brightness(70%);
+    cursor: not-allowed;
+  }
+
+  button:active,
+  button:focus,
+  button:focus-visible {
+    @include update-outline-color($cyberpunk-page-bg-nav-text-and-outline);
+  }
+
+  input:focus:enabled:not(:active),
+  select:focus:enabled {
+    @include update-outline-color($cyberpunk-page-bg-nav-text-and-outline);
+  }
+
+  .content-container:not(.player, .monster, .npc) {
+    @include update-background-color($cyberpunk-container-bg);
+  }
+
+  .row:hover {
+    @include update-outline-color($cyberpunk-page-bg-nav-text-and-outline);
+  }
+
+  .title-text {
+    @include update-text-color($cyberpunk-player-and-link-hover);
+  }
+
+  .credit-text {
+    @include update-text-color($cyberpunk-page-bg-nav-text-and-outline);
+  }
+
+  .player {
+    @include update-background-color($cyberpunk-player-and-link-hover);
+  }
+
+  .monster {
+    @include update-background-color($cyberpunk-monster);
+  }
+
+  .npc {
+    @include update-background-color($cyberpunk-npc);
+  }
+
+  .default {
+    @include update-background-color($cyberpunk-container-bg);
+    @include update-text-color($cyberpunk-page-bg-nav-text-and-outline);
+  }
+
+  .home-text {
+    .player-text {
+      @include update-text-color($cyberpunk-player-and-link-hover);
+    }
+    .monster-text {
+      @include update-text-color($cyberpunk-monster);
+    }
+    .npc-text {
+      @include update-text-color($cyberpunk-npc);
+    }
+  }
+}
+
+/* -------------- */
+/* Grimdark Theme */
+/* -------------- */
+
+.grimdark-theme {
+  *:not(mat-icon) {
+    font-family: 'New Rocker', system-ui;
+    font-optical-sizing: auto;
+    font-style: normal;
+    line-height: 1;
+  }
+
+  .main-nav {
+    @include update-background-color($grimdark-container-bg);
+    @include update-text-color($grimdark-page-bg-nav-text-and-outline);
+
+    .nav-logo {
+      @include update-text-color($grimdark-page-bg-nav-text-and-outline);
+    }
+
+    .nav-menu {
+      a {
+        @include update-text-color($grimdark-page-bg-nav-text-and-outline);
+      }
+
+      a:hover {
+        @include update-text-color($grimdark-player-and-link-hover);
+        text-decoration: underline;
+      }
+
+      .active-link {
+        @include update-text-color($grimdark-player-and-link-hover);
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .dropdown-container {
+    .themes-link:hover {
+      @include update-text-color($grimdark-player-and-link-hover);
+    }
+  }
+
+  app-theme-selection a:hover {
+    @include update-text-color($grimdark-player-and-link-hover);
+  }
+
+  .page-container,
+  .main-modal {
+    background-image: url('../src/app/images/spiderweb.jpg');
+    background-size: cover;
+    background-position: center;
+    @include update-background-color($grimdark-container-bg);
+    padding: calc(var(--spacing-l) * 1.5);
+    gap: calc(var(--spacing-l) * 1.5);
+  }
+
+  .main-modal {
+    @include update-border-colors(8px, $grimdark-bottomright, $grimdark-topleft);
+
+    .content-container {
+      @include update-border-colors(8px, $grimdark-topleft, $grimdark-bottomright);
+    }
+  }
+
+  .content-container {
+    @include update-border-colors(8px, $grimdark-topleft, $grimdark-bottomright);
+  }
+
+  button:hover:enabled:not(:active) {
+    @include update-outline-color($grimdark-page-bg-nav-text-and-outline);
+    cursor: pointer;
+  }
+
+  button:disabled {
+    filter: brightness(70%);
+    cursor: not-allowed;
+  }
+
+  button:active,
+  button:focus,
+  button:focus-visible {
+    @include update-outline-color($grimdark-page-bg-nav-text-and-outline);
+  }
+
+  input:focus:enabled:not(:active),
+  select:focus:enabled {
+    @include update-outline-color($grimdark-page-bg-nav-text-and-outline);
+  }
+
+  .content-container:not(.player, .monster, .npc) {
+    @include update-background-color($grimdark-container-bg);
+  }
+
+  .row:hover {
+    @include update-outline-color($grimdark-page-bg-nav-text-and-outline);
+  }
+
+  .title-text {
+    @include update-text-color($grimdark-player-and-link-hover);
+  }
+
+  .credit-text {
+    @include update-text-color($grimdark-page-bg-nav-text-and-outline);
+  }
+
+  .player {
+    @include update-background-color($grimdark-player-and-link-hover);
+  }
+
+  .monster {
+    @include update-background-color($grimdark-monster);
+  }
+
+  .npc {
+    @include update-background-color($grimdark-npc);
+  }
+
+  .default {
+    @include update-background-color($grimdark-container-bg);
+    @include update-text-color($grimdark-page-bg-nav-text-and-outline);
+  }
+
+  .home-text {
+    .player-text {
+      @include update-text-color($grimdark-player-and-link-hover);
+    }
+    .monster-text {
+      @include update-text-color($grimdark-monster);
+    }
+    .npc-text {
+      @include update-text-color($grimdark-npc);
     }
   }
 }

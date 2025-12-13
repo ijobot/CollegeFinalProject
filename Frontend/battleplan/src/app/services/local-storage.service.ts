@@ -5,6 +5,8 @@ import { inject, Injectable, PLATFORM_ID } from '@angular/core';
   providedIn: 'root',
 })
 export class LocalStorageService {
+  // A simple service to pass data to and from LocalStorage easily.
+  // It is only used to store the currentUser object, but is scalable to allow for much more functionality.
   private readonly platformId = inject(PLATFORM_ID);
 
   saveData(key: string, value: string) {

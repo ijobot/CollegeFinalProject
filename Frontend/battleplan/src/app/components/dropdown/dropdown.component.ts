@@ -26,6 +26,7 @@ import { ClickOutsideDirective } from '../../utils/clickoutside.directive';
   styles: ``,
 })
 export class DropdownComponent {
+  // This component houses the theme selection and sign out functionality.
   isOpen: boolean = false;
 
   toggleDropdown(): void {

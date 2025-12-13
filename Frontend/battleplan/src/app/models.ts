@@ -17,6 +17,8 @@ export interface ConvertedMonster {
 export enum CSSTheme {
   default = 'default-theme',
   fantasy = 'fantasy-theme',
+  grimdark = 'grimdark-theme',
+  cyberpunk = 'cyberpunk-theme',
 }
 
 export interface Combatant {

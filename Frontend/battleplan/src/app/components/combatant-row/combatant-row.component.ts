@@ -14,6 +14,8 @@ import { ModalService } from '../../services/modal.service';
     <div class="row" [ngClass]="combatant.type.toLowerCase()">
       <!-- COMBATANT NAME -->
       @if (combatant.statBlockUrl.length && combatant.type == 'Monster') {
+      <!-- If the combatantType is Monster and the name was chosen from the autocomplete's monster codex,
+         this applies the link icon for users to click and visit thier stat block page on the official website. -->
       <div class="row-item row-name center-text">
         <a
           class="monster-link"
@@ -23,6 +25,7 @@ import { ModalService } from '../../services/modal.service';
         >
       </div>
       } @else {
+      <!-- Otherwise, an empty div with the same size is retained to ensure consistent spacing with all other rows. -->
       <div class="row-item row-name center-text"></div>
       }
       <div class="row-item row-name center-text">
@@ -54,6 +57,7 @@ import { ModalService } from '../../services/modal.service';
           (click)="handleUpdateCombatant(modalText.updateScore, modalContent.updateScore)"
         >
           @if (initiative$ | async) {
+          <!-- Initiative Score is able to be on or off, as some games still require a combatant list but don't use scoring. -->
           {{ combatant.score }}
           }
         </button>
@@ -80,12 +84,12 @@ export class CombatantRowComponent {
   modalContent = ModalContent;
   initiative$ = this.combatantService.initiative$;
 
-  // Clicking the X button on a row deletes the combatant
+  // Clicking the X button on a row deletes the combatant.
   handleRemoveCombatant(index: number): void {
     this.combatantService.removeCombatant(index);
   }
 
-  // Clicking any attribute button on a row triggers the update modal
+  // Clicking any attribute button on a row triggers the update modal.
   handleUpdateCombatant(updateAttribute: ModalText, modalContent: ModalContent): void {
     this.modalService.setModalAppearance(
       this.combatant.type,

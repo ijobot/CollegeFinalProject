@@ -6,28 +6,29 @@ import { AboutComponent } from './pages/about/about.component';
 import { AuthGuardService } from './services/auth-guard.service';
 
 export const routes: Routes = [
+  // The base path automatically redirects to the /login path.
   {
     path: '',
     redirectTo: '/login',
     pathMatch: 'full',
   },
+  // The /login path is blocked by the AuthGuard to anyone already signed into the application.
+  // To access the login screen again, the user must first sign out.
   {
     path: 'login',
-    title: 'BattlePlan Login',
+    title: 'Login',
     component: LoginComponent,
     canActivate: [AuthGuardService],
   },
   {
     path: 'home',
-    title: 'BattlePlan Home',
-
+    title: 'Home',
     component: HomeComponent,
   },
   {
     path: 'battlefield',
-    title: 'BattlePlan Battlefield',
-
+    title: 'Battlefield',
     component: BattlefieldComponent,
   },
-  { path: 'about', title: 'BattlePlan About', component: AboutComponent },
+  { path: 'about', title: 'About', component: AboutComponent },
 ];

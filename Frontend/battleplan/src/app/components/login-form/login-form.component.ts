@@ -14,7 +14,7 @@ import { UserService } from '../../services/user.service';
   imports: [ReactiveFormsModule],
   template: `<form
     [formGroup]="loginForm"
-    (ngSubmit)="entryType === 'logIn' ? onLoginSubmit() : onSignUpSubmit()"
+    (ngSubmit)="entryType === 'logIn' ? onLogInSubmit() : onSignUpSubmit()"
     cdkTrapFocus
   >
     <div class="field">
@@ -46,6 +46,8 @@ import { UserService } from '../../services/user.service';
       <button type="button" (click)="handleCloseModal()">Cancel</button>
     </div>
   </form>`,
+  // The various forms within this app are the only Components with dedicated CSS, as it is easier to manage
+  // during responsive design and forms typically remain the same or extrememly similar even on smaller screens.
   styles: `form {
   display: flex;
   flex-direction: column;
@@ -111,12 +113,13 @@ export class LoginFormComponent implements OnDestroy {
     return this.loginForm.get('password')?.value;
   }
 
-  onLoginSubmit(): void {
+  onLogInSubmit(): void {
+    // Separate but similar functionality depending on LogIn or SignUp.
     this.backendServerService
       .checkLogInCredentials(this.username, this.password)
       .pipe(takeUntil(this._destroy$))
       .subscribe((data) => {
-        if (data.status == 'SUCCESS') {
+        if (data.status == 'success') {
           this.modalService.setModalAppearance(
             CombatantType.default,
             ModalText.logInSuccess,
@@ -128,7 +131,7 @@ export class LoginFormComponent implements OnDestroy {
             this.redirectToHome();
           }, 2000);
         }
-        if (data.status == 'FAILED') {
+        if (data.status == 'failed') {
           alert(data.message);
         }
       });
@@ -139,7 +142,7 @@ export class LoginFormComponent implements OnDestroy {
       .checkSignUpCredentials(this.username, this.password)
       .pipe(takeUntil(this._destroy$))
       .subscribe((data) => {
-        if (data.status == 'SUCCESS') {
+        if (data.status == 'success') {
           this.modalService.setModalAppearance(
             CombatantType.default,
             ModalText.signUpSuccess,
@@ -151,7 +154,7 @@ export class LoginFormComponent implements OnDestroy {
             this.redirectToHome();
           }, 2000);
         }
-        if (data.status == 'FAILED') {
+        if (data.status == 'failed') {
           alert(data.message);
         }
       });
@@ -161,13 +164,13 @@ export class LoginFormComponent implements OnDestroy {
     this.modalService.closeModal();
   }
 
-  // Automatically forwarding signed in users to the home page, as there is no link or button to click
-  // Only a successful login will allow the deeper pages of the app to load
+  // Automatically forwards signed in users to the home page, as there is no link or button to click.
+  // Only a successful login will allow access to the deeper pages of the app.
   redirectToHome(): void {
     this.router.navigate(['/home']);
   }
 
-  // Handling hanging subscriptions
+  // Handles hanging subscriptions.
   ngOnDestroy(): void {
     this._destroy$.next();
   }

@@ -6,11 +6,12 @@ import { CSSTheme } from '../models';
   providedIn: 'root',
 })
 export class ThemeService {
+  // Service for updating the root HTML with an overall theme className.
+  // This is a much simpler approach than changing multiple classes throughout the project, and thus far easier to manage.
   private document = inject(DOCUMENT);
+  private _currentTheme$ = new BehaviorSubject<CSSTheme>(CSSTheme.default);
 
   currentTheme$ = new Observable<CSSTheme>();
-
-  private _currentTheme$ = new BehaviorSubject<CSSTheme>(CSSTheme.fantasy);
 
   constructor() {
     this.currentTheme$ = this._currentTheme$.asObservable();
@@ -20,7 +21,12 @@ export class ThemeService {
     const mainHTML = this.document.getElementById('app-root');
 
     if (mainHTML) {
-      mainHTML.classList.remove(CSSTheme.default, CSSTheme.fantasy);
+      mainHTML.classList.remove(
+        CSSTheme.default,
+        CSSTheme.fantasy,
+        CSSTheme.cyberpunk,
+        CSSTheme.grimdark
+      );
       mainHTML.classList.add(theme);
       this._currentTheme$.next(theme);
     }

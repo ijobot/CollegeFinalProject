@@ -7,6 +7,4 @@ import { RouterModule, RouterOutlet } from '@angular/router';
   template: ` <router-outlet> </router-outlet> `,
   styles: [],
 })
-export class App {
-  protected readonly title = signal('Battle Plan');
-}
+export class App {}

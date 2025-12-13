@@ -6,47 +6,56 @@ const logger = require("../logger");
 
 router.use(logger);
 
+// As soon as the user lands on the login/signup page, a connection to the database is established.
+// They are not connected to a profile yet, but the front-end, back-end, and DB are all now communicating.
 router.get("/", async (req, res) => {
   try {
     const connection = await sql.connect(config);
     if (connection) {
       console.log("database successfully connected");
-      res.send({ message: "Login Router is working." });
+      res.send({ message: "Login success!" });
     }
   } catch (err) {
     console.log(err);
   }
 });
 
+// Helper function to access the current user's profile when needed.  Password is never revealed on the front-end.
 router.get("/:username", async (req, res) => {
-  const getUserData = await sql.query(
-    `SELECT id, username FROM Users WHERE username = '${req.params.username.substring(
-      1
-    )}'`
-  );
-  res.send(getUserData.recordset[0]);
+  try {
+    const getUserData = await sql.query(
+      `SELECT id, username FROM Users WHERE username = '${req.params.username.substring(
+        1
+      )}'`
+    );
+    // Recordset always returns an array, but we only ever need 1 user at a time.
+    res.send(getUserData.recordset[0]);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
+// Handling login, checking if profile exists, checking empty inputs, checking password.
 router.post("/login", async (req, res) => {
   // Deconstruct the request body
   let { username, password } = req.body;
 
   // Create outcome responses
   const emptyFields = {
-    status: "FAILED",
+    status: "failed",
     message: "Empty username or password!",
   };
   const incorrectPassword = {
-    status: "FAILED",
+    status: "failed",
     message: "Incorrect password!",
   };
   const userNotFound = {
-    status: "FAILED",
-    message: `No user with that username.`,
+    status: "failed",
+    message: `No user with that username!`,
   };
   const credentialsPassed = {
-    status: "SUCCESS",
-    message: `You have logged into the system as ${username}!`,
+    status: "success",
+    message: `You have successfully logged in as ${username}!`,
   };
 
   try {
@@ -92,22 +101,23 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// Handling signup, same as login but with added functionality of creating the user profile and user_SavedParty tables.
 router.post("/signup", async (req, res) => {
   // Deconstruct the request body
   let { username, password } = req.body;
 
   // Create outcome responses
   const emptyFields = {
-    status: "FAILED",
+    status: "failed",
     message: "Empty username or password!",
   };
   const nameAlreadyExists = {
-    status: "FAILED",
+    status: "failed",
     message: `That username already exists!`,
   };
   const userProfileCreated = {
-    status: "SUCCESS",
-    message: `You have successfully created the ${username} profile!`,
+    status: "success",
+    message: `${username} profile successfully created!`,
   };
 
   try {

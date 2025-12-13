@@ -3,7 +3,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Combatant, CombatantType } from '../models';
 import { BackendServerService } from './backend-server.service';
 import { LocalStorageService } from './local-storage.service';
-import { MonsterService } from './monster.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +10,6 @@ import { MonsterService } from './monster.service';
 export class CombatantService {
   private localStorageService = inject(LocalStorageService);
   private backendServerService = inject(BackendServerService);
-  private monsterService = inject(MonsterService);
 
   private _combatants$ = new BehaviorSubject<Combatant[]>([]);
   private _initiative$ = new BehaviorSubject<boolean>(true);
@@ -44,20 +42,26 @@ export class CombatantService {
     this.sortCombatants(updatedCombatants);
   }
 
+  // Only removes/deletes the combatant from the screen, not the database.  If the user wants to delete from the database,
+  // they simply need to save over old data.
   removeCombatant(index: number): void {
     this._combatants$.getValue().splice(index, 1);
     this._combatants$.next([...this._combatants$.getValue()]);
   }
 
+  // Same as removeCombatant, this only affects what is seen on screen.  To propagate changes to the database,
+  // the user must save over the old data.
   editCombatant(
     combatant: Combatant,
     updateType: string,
-    newValue: string | number | CombatantType
+    newValue: string | number | CombatantType,
+    newStatBlock: string
   ): void {
-    // Update correct property
+    // Update correct property.
     switch (updateType) {
       case 'name':
         combatant.name = newValue as string;
+        combatant.statBlockUrl = newStatBlock as string;
         break;
       case 'type':
         combatant.type = newValue as CombatantType;
@@ -66,24 +70,27 @@ export class CombatantService {
         combatant.score = newValue as number;
     }
 
-    // Re-sort list based on changes
+    // Re-sort list based on changes.
     this.sortCombatants();
   }
 
+  // Helper function to ensure the combatantList is always in the correct order, highest to lowest.
+  // Ties go to whichever combatant was entered first.
   sortCombatants(updatedCombatants?: Combatant[]): void {
-    // Check if argument is passed, and if not, just sort current list
+    // Check if argument is passed, and if not, just sort current list.
     if (!updatedCombatants) {
       this._combatants$.next([...this._combatants$.getValue().sort((a, b) => b.score - a.score)]);
     } else {
-      // Check if initiative is turned off, and if so, just display the list unsorted
+      // Check if initiative is turned off, and if so, just display the list unsorted.
       if (this._initiative$.getValue() == false) {
         this._combatants$.next(updatedCombatants);
       }
-      // Otherwise, sort the list with the newly added combatant
+      // Otherwise, sort the list with the newly added combatant.
       this._combatants$.next(updatedCombatants.sort((a, b) => Number(b.score) - Number(a.score)));
     }
   }
 
+  // Overwrites the current user_SavedParty connected to this profile in the database.
   saveCurrentCombatants(): void {
     // Save only works if combatants are on the list
     const user = this.localStorageService.getData('Current User');
@@ -99,12 +106,12 @@ export class CombatantService {
     }
   }
 
+  // Loads the current user_SavedParty from the database.
   loadSavedCombatants(): void {
     // Load only works if previous combatants have been saved
     const user = this.localStorageService.getData('Current User');
     if (user) {
       const userParsed = JSON.parse(user);
-      console.log('HEY JOE USERPARSED', userParsed);
       this.backendServerService.loadParty(userParsed.username).subscribe((data) => {
         const updatedCombatants = [...data];
         this.sortCombatants(updatedCombatants);
@@ -113,8 +120,8 @@ export class CombatantService {
     }
   }
 
+  // Does not affect combatants saved in database - just clears the onscreen list.
   clearAllCombatants(): void {
-    // Does not affect combatants saved in database - just clears the list
     this._combatants$.next([]);
   }
 }
