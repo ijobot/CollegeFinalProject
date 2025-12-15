@@ -16,7 +16,7 @@ export class MonsterService {
   }
 
   async getMonsters() {
-    // Is automatically called by the HomeComponent after a successful login
+    // Is automatically called by the BattlefieldComponent after a successful login
     if (!this._monsterList$.getValue().length) {
       // Only performs call once so user can switch between pages without constantly retrieving the same data
       try {
